@@ -1,0 +1,13 @@
+.list{
+    margin: 42px 29px 24px 29px;
+    display: flex;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+}
+
+.buttons{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

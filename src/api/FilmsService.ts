@@ -1,11 +1,11 @@
 import { BASE_URL } from "../constants/constants.ts";
 import type {
   GetFilmsResponseType,
-  IGetFilmsErrorResponse,
+  IGetFilmsErrorResponse, IGetFilmsRequest,
 } from "./apiTypes.ts";
 
 class FilmsService {
-  static async getFilms(body) {
+  static async getFilms(body: IGetFilmsRequest) {
     try {
       const response = await fetch(`${BASE_URL}/getFilms`, {
         method: "POST",
@@ -20,7 +20,7 @@ class FilmsService {
     }
   }
 
-  private static async checkResponseStatus(response) {
+  private static async checkResponseStatus(response: Response) {
     const responseJSON: GetFilmsResponseType = await response.json();
     if (responseJSON.success) {
       return responseJSON;

@@ -1,0 +1,27 @@
+.button {
+    background-color: var(--add-button-bg-color);
+    border: 1px solid var(--add-button-bg-color);
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--body-bg-color);
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    width: 330px;
+    height: 40px;
+    border-radius: 8px;
+}
+
+.button_svg{
+    width: 24px;
+    height: 24px;
+    background-image: url("../../../assets/add.svg");
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.button:hover {
+    background-color: var(--hover-add-button-bg-color);
+}

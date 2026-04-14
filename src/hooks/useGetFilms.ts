@@ -2,8 +2,9 @@ import { useEffect } from "react";
 import FilmsService from "../api/FilmsService.ts";
 import { useAppDispatch } from "./storeHooks.ts";
 import { setFilms, setStatistic, toggleIsLoading } from "../store/mainSlice.ts";
+import type {IGetFilmsRequest} from "../api/apiTypes.ts";
 
-export function useGetFilms(body) {
+export function useGetFilms(body: IGetFilmsRequest) {
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(toggleIsLoading());

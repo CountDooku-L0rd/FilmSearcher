@@ -4,6 +4,13 @@
   --body-bg-color: #F5F5F5;
   --element-bg-color: #FFFFFF;
   --gray-text-color: #757575;
+    --border-color: #D9D9D9;
+    --placeholder-text-color: #B3B3B3;
+    --button-border-color: #767676;
+    --button-background-color: #E3E3E3;
+    --add-button-bg-color: #2C2C2C;
+  --hover-add-button-bg-color: #1E1E1E;
+  --hover-button-bg-color: #CDCDCD;
 }
 
 body{
