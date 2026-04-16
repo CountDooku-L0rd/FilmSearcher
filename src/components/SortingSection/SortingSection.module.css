@@ -2,6 +2,7 @@
     margin: 42px 29px 24px 29px;
     display: flex;
     align-items: center;
+    justify-content: center;
     list-style: none;
     padding: 0;
 }

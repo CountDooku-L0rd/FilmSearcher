@@ -44,3 +44,8 @@ export const sortingOrders: { value: string; label: string }[] = [
   { value: "descOrder", label: "По убыванию" },
   { value: "ascOrder", label: "По возрастанию" },
 ];
+
+export enum EStatus {
+  in_plans = 0,
+  watched = 1,
+}

@@ -5,7 +5,7 @@ import AddFilmButton from "./AddFilmButton/AddFilmButton.tsx";
 
 const SortingSection = () => {
     return (
-        <>
+        <section>
             <ul className={styles.list}>
                 <li>
                     <SearchInput/>
@@ -20,7 +20,7 @@ const SortingSection = () => {
                     <AddFilmButton/>
                 </li>
             </ul>
-        </>
+        </section>
     )
 }
 

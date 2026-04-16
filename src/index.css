@@ -11,6 +11,10 @@
     --add-button-bg-color: #2C2C2C;
   --hover-add-button-bg-color: #1E1E1E;
   --hover-button-bg-color: #CDCDCD;
+  --title-text-color: #000000;
+  --description-text-color: #555555;
+  --watched-bg-color: #EBFFEE;
+  --in-plans-bg-color: #FEF9E7;
 }
 
 body{

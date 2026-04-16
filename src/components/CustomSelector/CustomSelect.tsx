@@ -1,7 +1,7 @@
 import styles from './CustomSelect.module.css'
 import type {CustomSelectProps} from "./props/CustomSelectProps.ts";
 import {useClickOutside} from "../../hooks/useClickOutside.ts";
-import {useId, useState} from "react";
+import {useState} from "react";
 
 const CustomSelect = ({options, value, onChange, title, width}: CustomSelectProps) => {
     const [isOpen, setIsOpen] = useState(false);

@@ -2,19 +2,21 @@ import { useEffect } from "react";
 import FilmsService from "../api/FilmsService.ts";
 import { useAppDispatch } from "./storeHooks.ts";
 import { setFilms, setStatistic, toggleIsLoading } from "../store/mainSlice.ts";
-import type {IGetFilmsRequest} from "../api/apiTypes.ts";
+import type {FilmsAPI} from "@yp-mentor/films-server-types";
 
-export function useGetFilms(body: IGetFilmsRequest) {
+type GetFilmsRequestType = Parameters<FilmsAPI['getFilms']>[0];
+export function useGetFilms(body: GetFilmsRequestType) {
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(toggleIsLoading());
-    FilmsService.getFilms(body)
+    const filmsService = new FilmsService();
+    filmsService.getFilms(body)
       .then((result) => {
         dispatch(setFilms(result.data));
         dispatch(setStatistic(result.statistic));
       })
-      .catch((err) => {
-        console.error(err);
+      .catch((err: Error) => {
+        console.error(err.message);
       })
       .finally(() => {
         dispatch(toggleIsLoading());

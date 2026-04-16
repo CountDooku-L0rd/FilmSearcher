@@ -1,14 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import type {
-  IFilm,
-  IGetFilmsSuccessResponse,
-  IStatistic,
-} from "../api/apiTypes.ts";
+import type {FilmsAPI} from "@yp-mentor/films-server-types";
 
+type GetFilmsSuccessResponseType = Awaited<ReturnType<FilmsAPI['getFilms']>>;
 interface MainState {
   isLoading: boolean;
-  films: IGetFilmsSuccessResponse["data"];
+  films: GetFilmsSuccessResponseType["data"];
   filmStatistic: {
     total: number | null;
     averageRating: number | null;
@@ -33,10 +30,10 @@ const mainSlice = createSlice({
     toggleIsLoading: (state) => {
       state.isLoading = !state.isLoading;
     },
-    setFilms: (state, action: PayloadAction<IFilm[]>) => {
+    setFilms: (state, action: PayloadAction<GetFilmsSuccessResponseType["data"]>) => {
       state.films = action.payload;
     },
-    setStatistic: (state, action: PayloadAction<IStatistic>) => {
+    setStatistic: (state, action: PayloadAction<GetFilmsSuccessResponseType["statistic"]>) => {
       state.filmStatistic = action.payload;
     },
   },
