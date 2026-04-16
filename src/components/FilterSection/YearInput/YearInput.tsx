@@ -1,10 +1,10 @@
 import styles from './YearInput.module.css'
 import {useAppDispatch, useAppSelector} from "../../../hooks/storeHooks.ts";
-import {setEndYear, setStartYear} from "../../../store/yearSlice.ts";
 import * as React from "react";
+import { setEndYear, setStartYear } from '../../../store/filterSlice.ts';
 
 const YearInput = () => {
-    const {startYear, endYear} = useAppSelector(store => store.year);
+    const {startYear, endYear} = useAppSelector(store => store.filter);
     const dispatch = useAppDispatch();
     const handleStartYear = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.value === '') {

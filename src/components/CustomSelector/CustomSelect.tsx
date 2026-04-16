@@ -1,43 +1,33 @@
-import styles from './CustomSelector.module.css'
-import type {CustomSelectorProps} from "./props/CustomSelectorProps.ts";
+import styles from './CustomSelect.module.css'
+import type {CustomSelectProps} from "./props/CustomSelectProps.ts";
 import {useClickOutside} from "../../hooks/useClickOutside.ts";
 import {useId, useState} from "react";
-import {useCustomSelect} from "../../hooks/useCustomSelect.ts";
 
-const CustomSelector = ({options, value, onChange, title, width}: CustomSelectorProps) => {
+const CustomSelect = ({options, value, onChange, title, width}: CustomSelectProps) => {
     const [isOpen, setIsOpen] = useState(false);
-    const {activeId, setActiveId} = useCustomSelect();
-    const id = useId();
 
     const ref = useClickOutside<HTMLDivElement>(() => {
         if (isOpen){
             setIsOpen(false);
-            if (activeId === id) setActiveId(null);
         }
     })
 
     const handleTriggerClick = () => {
         if (!isOpen){
-            setActiveId(id);
             setIsOpen(true);
         } else{
             setIsOpen(false);
-            setActiveId(null);
         }
-    }
-    if (activeId!== id && isOpen){
-        setIsOpen(false);
     }
 
     const handleCustomSelect = (option: {value: string; label: string}) => {
-         onChange(option)
+        onChange(option)
         setIsOpen(false);
-        setActiveId(null)
     }
     return (
         <div ref={ref} className={styles.container}>
             <p className={styles.text}>{title}</p>
-            <div className={styles.selector_input} onClick={handleTriggerClick} style={{width: width}}>
+            <div className={styles.selector_input} onClick={handleTriggerClick} style={{width}}>
                 <span>{value?.label}</span>
                 <span className={`${styles.selector_input_svg} ${isOpen ? styles.svg_reverse : false}`}></span>
             </div>
@@ -54,4 +44,4 @@ const CustomSelector = ({options, value, onChange, title, width}: CustomSelector
     )
 }
 
-export default CustomSelector
+export default CustomSelect

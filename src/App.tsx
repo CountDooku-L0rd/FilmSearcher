@@ -3,7 +3,6 @@ import Header from "./components/Header/Header";
 import "./App.css";
 import SortingSection from "./components/SortingSection/SortingSection.tsx";
 import FilterSection from "./components/FilterSection/FilterSection.tsx";
-import {CustomSelectProvider} from "./context/CustomSelectProvider.tsx";
 
 function App() {
   useGetFilms({
@@ -13,11 +12,11 @@ function App() {
     },
   });
   return (
-    <CustomSelectProvider>
+    <>
       <Header />
       <SortingSection/>
       <FilterSection/>
-    </CustomSelectProvider>
+    </>
   );
 }
 
