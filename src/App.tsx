@@ -4,21 +4,23 @@ import "./App.css";
 import SortingSection from "./components/SortingSection/SortingSection.tsx";
 import FilterSection from "./components/FilterSection/FilterSection.tsx";
 import FilmsSection from "./components/FilmsSection/FilmsSection.tsx";
+import {useAppSelector} from "./hooks/storeHooks.ts";
 
 function App() {
-  useGetFilms({
-    pagination: {
-      page: 1,
-      pageSize: 8,
-    },
-  });
+  useGetFilms();
+  const mainSlice = useAppSelector(store => store.main)
   return (
     <>
       <Header />
         <main className="main">
             <SortingSection/>
             <FilterSection/>
-            <FilmsSection/>
+            {mainSlice.isLoading && (
+                <div>
+                    <div className={'preloader'}></div>
+                </div>
+            )}
+            {!mainSlice.isLoading && <FilmsSection/>}
         </main>
     </>
   );

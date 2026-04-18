@@ -1,8 +1,8 @@
-import type {EStatus} from "../../../../../constants/constants.ts";
+import type {EStatus} from "@yp-mentor/films-server-types";
 
 export interface FilmButtonProps {
+    id: number,
     type: string,
     status?: EStatus,
-    onClick: () => void
+    onClick: (id: number) => void
 }
-

@@ -9,15 +9,24 @@ const StatisticSection = () => {
     <>
       <ul className={styles.list}>
         <li className={styles.list__elem}>
-          <p className={styles.number}>{total ? total : 'Нет данных'}</p>
+          <div>
+            {total && <p className={styles.number}>{total}</p>}
+            {!total && <div className={styles.statistic_preloader}></div>}
+          </div>
           <p className={styles.text}>Всего фильмов</p>
         </li>
         <li className={styles.list__elem}>
-          <p className={styles.number}>{watched ? watched : 'Нет данных'}</p>
+          <div>
+            {watched && <p className={styles.number}>{watched}</p>}
+            {!watched && <div className={styles.statistic_preloader}></div>}
+          </div>
           <p className={styles.text}>Просмотрено</p>
         </li>
         <li className={styles.list__elem}>
-          <p className={styles.number}>{averageRating ? averageRating.toFixed(1) : 'Нет данных'}</p>
+          <div>
+            {averageRating && <p className={styles.number}>{averageRating.toFixed(1)}</p>}
+            {!averageRating && <div className={styles.statistic_preloader}></div>}
+          </div>
           <p className={styles.text}>Средний рейтинг</p>
         </li>
       </ul>

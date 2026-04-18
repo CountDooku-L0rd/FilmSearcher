@@ -14,7 +14,7 @@ interface MainState {
 }
 
 const initialState: MainState = {
-  isLoading: false,
+  isLoading: true,
   films: [],
   filmStatistic: {
     total: null,
@@ -27,8 +27,8 @@ const mainSlice = createSlice({
   name: "main",
   initialState,
   reducers: {
-    toggleIsLoading: (state) => {
-      state.isLoading = !state.isLoading;
+    setIsLoading: (state, action: PayloadAction<boolean>) => {
+      state.isLoading = action.payload;
     },
     setFilms: (state, action: PayloadAction<GetFilmsSuccessResponseType["data"]>) => {
       state.films = action.payload;
@@ -39,6 +39,6 @@ const mainSlice = createSlice({
   },
 });
 
-export const { toggleIsLoading, setFilms, setStatistic } = mainSlice.actions;
+export const { setIsLoading, setFilms, setStatistic } = mainSlice.actions;
 
 export default mainSlice.reducer;

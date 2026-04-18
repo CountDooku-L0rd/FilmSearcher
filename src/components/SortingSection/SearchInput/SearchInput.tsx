@@ -1,26 +1,29 @@
-import { useState, type ChangeEventHandler } from "react";
+import {type ChangeEvent, useState} from "react";
 import styles from "./SearchInput.module.css";
+import {useAppDispatch, useAppSelector} from "../../../hooks/storeHooks.ts";
+import {setSearchString} from "../../../store/filterSlice.ts";
 
 const SearchInput = () => {
-  const [inputValue, setInputValue] = useState("");
+  const dispatch = useAppDispatch()
+  const {searchString} = useAppSelector(store => store.filter);
   const [isEmpty, setIsEmpty] = useState(true);
 
   const handleClick = () => {
     setIsEmpty(true);
-    setInputValue("");
+    dispatch(setSearchString(""));
   };
-  const handleChange = (event) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.value !== "") {
       setIsEmpty(false);
     } else {
       setIsEmpty(true);
     }
-    setInputValue(event.target.value);
+    dispatch(setSearchString(event.target.value));
   };
   return (
     <div className={styles.label}>
       <input
-        value={inputValue}
+        value={searchString}
         className={styles.input}
         placeholder={"Поиск по названию, режиссеру или описанию"}
         onChange={handleChange}

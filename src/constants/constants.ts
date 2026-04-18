@@ -2,21 +2,21 @@ export const BASE_URL = "http://localhost:3000";
 
 export const genreOptions: { value: string; label: string }[] = [
   { value: "allGenres", label: "Все жанры" },
-  { value: "drama", label: "Драма" },
-  { value: "comedy", label: "Комедия" },
-  { value: "action", label: "Экшен" },
-  { value: "fantasy", label: "Фэнтези" },
-  { value: "thriller", label: "Триллер" },
-  { value: "horror", label: "Хоррор" },
-  { value: "melodrama", label: "Мелодрама" },
-  { value: "adventure", label: "Приключение" },
-  { value: "detective", label: "Детектив" },
+  { value: "0", label: "Драма" },
+  { value: "1", label: "Комедия" },
+  { value: "2", label: "Экшен" },
+  { value: "3", label: "Фэнтези" },
+  { value: "4", label: "Триллер" },
+  { value: "5", label: "Хоррор" },
+  { value: "6", label: "Мелодрама" },
+  { value: "7", label: "Приключение" },
+  { value: "8", label: "Детектив" },
 ];
 
 export const statusOptions: { value: string; label: string }[] = [
   { value: "allStatuses", label: "Все статусы" },
-  { value: "watched", label: "Просмотрено" },
-  { value: "inPlans", label: "В планах" },
+  { value: "1", label: "Просмотрено" },
+  { value: "0", label: "В планах" },
 ];
 
 export const ratingOptions: { value: string; label: string }[] = [
@@ -34,18 +34,13 @@ export const ratingOptions: { value: string; label: string }[] = [
 ];
 
 export const sortingBy: { value: string; label: string }[] = [
-  { value: "byName", label: "Названию" },
-  { value: "byReleaseYear", label: "Году выпуска" },
-  { value: "byRating", label: "Рейтингу" },
-  { value: "byAddDate", label: "Дате добавления" },
+  { value: "3", label: "Названию" },
+  { value: "0", label: "Году выпуска" },
+  { value: "1", label: "Рейтингу" },
+  { value: "2", label: "Дате добавления" },
 ];
 
 export const sortingOrders: { value: string; label: string }[] = [
-  { value: "descOrder", label: "По убыванию" },
-  { value: "ascOrder", label: "По возрастанию" },
+  { value: "1", label: "По убыванию" },
+  { value: "0", label: "По возрастанию" },
 ];
-
-export enum EStatus {
-  in_plans = 0,
-  watched = 1,
-}
