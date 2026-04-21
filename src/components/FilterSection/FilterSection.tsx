@@ -12,6 +12,7 @@ import YearInput from "./YearInput/YearInput.tsx";
 import {
   setEndYear,
   setGenreValue,
+  setPage,
   setRatingValue,
   setSortBy,
   setSortingOrder,
@@ -32,12 +33,15 @@ const FilterSection = () => {
     useAppSelector((store) => store.filter);
   const handleGenre = (option: { value: EGenre; label: string }) => {
     dispatch(setGenreValue(option));
+    dispatch(setPage(1));
   };
   const handleStatus = (option: { value: EStatus; label: string }) => {
     dispatch(setStatusValue(option));
+    dispatch(setPage(1));
   };
   const handleRating = (option: { value: string; label: string }) => {
     dispatch(setRatingValue({ value: option.value, label: option.label }));
+    dispatch(setPage(1));
   };
   const handleClearFilters = () => {
     dispatch(setGenreValue({ value: EGenre.all, label: "Все жанры" }));
@@ -45,12 +49,15 @@ const FilterSection = () => {
     dispatch(setRatingValue({ value: "allRatings", label: "Любой рейтинг" }));
     dispatch(setStartYear(null));
     dispatch(setEndYear(null));
+    dispatch(setPage(1));
   };
   const handleSortBy = (option: { value: ESortField; label: string }) => {
     dispatch(setSortBy(option));
+    dispatch(setPage(1));
   };
   const handleSortOrder = (option: { value: ESortOrder; label: string }) => {
     dispatch(setSortingOrder(option));
+    dispatch(setPage(1));
   };
   return (
     <>
@@ -88,7 +95,7 @@ const FilterSection = () => {
                 value={statusValue}
                 onChange={handleStatus}
                 title={"Статус просмотра"}
-                width={145}
+                width={160}
               />
               <CustomSelector
                 options={ratingOptions}

@@ -126,7 +126,7 @@ const AddOrEditPopup = ({
       alert("Пожалуйста, исправьте ошибки в форме");
       return;
     }
-    
+
     onSubmit(
       {
         title: title,
@@ -205,7 +205,7 @@ const AddOrEditPopup = ({
             {errors.director && <p className="Error">{errors.director}</p>}
           </label>
         </div>
-        <label className="label">
+        <div className="label">
           <p>Жанры *</p>
           <ul className="list">
             {genreOptions.map((item) =>
@@ -228,7 +228,7 @@ const AddOrEditPopup = ({
             )}
           </ul>
           {errors.genres && <p className="Error">{errors.genres}</p>}
-        </label>
+        </div>
         <div className="label_group">
           <label className="label">
             <p className="input_title">Рейтинг (1-10) *</p>

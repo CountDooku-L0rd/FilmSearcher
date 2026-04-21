@@ -11,8 +11,8 @@ const CustomCheckbox = <T,>({
 }) => {
   return (
     <li>
-      <label className={`${styles.custom_checkbox}`}>
-        <input checked={isChecked} className={styles.checkbox} type="checkbox" onChange={(e) => {onChange(value.value, e.target.checked)}}/>
+      <label className={`${styles.custom_checkbox}`} onClick={(e) => {e.stopPropagation()}}>
+        <input id={`genre-${value.value}`} checked={isChecked} className={styles.checkbox} type="checkbox" onChange={(e) => {onChange(value.value, e.target.checked)}} onClick={(e) => e.stopPropagation()}/>
         <span className={styles.custom_checkmark}></span>
         {value.label}
       </label>
