@@ -1,22 +1,34 @@
+import {
+  EGenre,
+  ESortField,
+  ESortOrder,
+  EStatus,
+} from "@yp-mentor/films-server-types";
+
 export const BASE_URL = "http://localhost:3000";
 
-export const genreOptions: { value: string; label: string }[] = [
-  { value: "allGenres", label: "Все жанры" },
-  { value: "0", label: "Драма" },
-  { value: "1", label: "Комедия" },
-  { value: "2", label: "Экшен" },
-  { value: "3", label: "Фэнтези" },
-  { value: "4", label: "Триллер" },
-  { value: "5", label: "Хоррор" },
-  { value: "6", label: "Мелодрама" },
-  { value: "7", label: "Приключение" },
-  { value: "8", label: "Детектив" },
+export const genreOptions: { value: EGenre; label: string }[] = [
+  { value: EGenre.all, label: "Все жанры" },
+  { value: EGenre.drama, label: "Драма" },
+  { value: EGenre.comedy, label: "Комедия" },
+  { value: EGenre.action, label: "Экшен" },
+  { value: EGenre.fantasy, label: "Фэнтези" },
+  { value: EGenre.thriller, label: "Триллер" },
+  { value: EGenre.horror, label: "Хоррор" },
+  { value: EGenre.melodrama, label: "Мелодрама" },
+  { value: EGenre.adventure, label: "Приключение" },
+  { value: EGenre.detective, label: "Детектив" },
 ];
 
-export const statusOptions: { value: string; label: string }[] = [
-  { value: "allStatuses", label: "Все статусы" },
-  { value: "1", label: "Просмотрено" },
-  { value: "0", label: "В планах" },
+export const statusOptions: { value: EStatus; label: string }[] = [
+  { value: EStatus.all, label: "Все статусы" },
+  { value: EStatus.watched, label: "Просмотрено" },
+  { value: EStatus.in_plans, label: "В планах" },
+];
+
+export const addStatusOptions: { value: EStatus; label: string }[] = [
+  { value: EStatus.watched, label: "Просмотрено" },
+  { value: EStatus.in_plans, label: "В планах" },
 ];
 
 export const ratingOptions: { value: string; label: string }[] = [
@@ -33,14 +45,14 @@ export const ratingOptions: { value: string; label: string }[] = [
   { value: "10", label: "10" },
 ];
 
-export const sortingBy: { value: string; label: string }[] = [
-  { value: "3", label: "Названию" },
-  { value: "0", label: "Году выпуска" },
-  { value: "1", label: "Рейтингу" },
-  { value: "2", label: "Дате добавления" },
+export const sortingBy: { value: ESortField; label: string }[] = [
+  { value: ESortField.title, label: "Названию" },
+  { value: ESortField.year, label: "Году выпуска" },
+  { value: ESortField.rating, label: "Рейтингу" },
+  { value: ESortField.createdAt, label: "Дате добавления" },
 ];
 
-export const sortingOrders: { value: string; label: string }[] = [
-  { value: "1", label: "По убыванию" },
-  { value: "0", label: "По возрастанию" },
+export const sortingOrders: { value: ESortOrder; label: string }[] = [
+  { value: ESortOrder.desc, label: "По убыванию" },
+  { value: ESortOrder.asc, label: "По возрастанию" },
 ];

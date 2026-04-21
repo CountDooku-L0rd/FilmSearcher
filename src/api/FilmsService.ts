@@ -12,7 +12,7 @@ type UpdateFilmResponseType = ReturnType<FilmsAPI['updateFilm']>;
 type ChangeFilmStatusRequestType = Parameters<FilmsAPI['changeFilmStatus']>[0];
 type ChangeFilmStatusResponseType = ReturnType<FilmsAPI['changeFilmStatus']>;
 class FilmsService implements FilmsAPI {
- async getFilms(body: GetFilmsRequestType): GetFilmsSuccessResponseType {
+ async getFilms({body}: GetFilmsRequestType): GetFilmsSuccessResponseType {
     try {
       const response = await fetch(`${BASE_URL}/getFilms`, {
         method: "POST",
@@ -110,7 +110,7 @@ class FilmsService implements FilmsAPI {
     if (responseJSON.success) {
       return responseJSON;
     } else {
-      throw new Error(responseJSON.errorMessage);
+      throw new Error((responseJSON as IErrorResponse).errorMessage);
     }
   }
 }

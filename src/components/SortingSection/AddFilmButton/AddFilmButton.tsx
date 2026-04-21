@@ -1,8 +1,8 @@
 import styles from './AddFilmButton.module.css'
 
-const AddFilmButton = () => {
+const AddFilmButton = ({onClick}: {onClick: () => void}) => {
     return (
-        <button className={styles.button}>
+        <button className={styles.button} onClick={onClick}>
             <span className={styles.button_svg}></span>
             Добавить фильм
         </button>

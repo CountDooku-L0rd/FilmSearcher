@@ -25,7 +25,7 @@ const sortSlice = createSlice({
                 state.isSortOpen = false;
             }
             state.isFilterOpen = !state.isFilterOpen;
-        }
+        },
     },
 });
 

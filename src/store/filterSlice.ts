@@ -1,27 +1,32 @@
-import {createSlice, type PayloadAction} from "@reduxjs/toolkit";
-import {EGenre, ESortField, ESortOrder, EStatus} from "@yp-mentor/films-server-types";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import {
+  EGenre,
+  ESortField,
+  ESortOrder,
+  EStatus,
+} from "@yp-mentor/films-server-types";
 
 interface FilterState {
-  genreValue: EGenre | null;
+  genreValue: { value: EGenre; label: string };
   ratingValue: { value: string; label: string };
-  statusValue: EStatus | null;
+  statusValue: { value: EStatus; label: string };
   startYear: number | null;
   endYear: number | null;
-  sortBy: ESortField;
-  sortingOrder: ESortOrder;
+  sortBy: { value: ESortField; label: string };
+  sortingOrder: { value: ESortOrder; label: string };
   searchString: string;
   page: number;
   pageSize: number;
 }
 
 const initialState: FilterState = {
-  genreValue: null,
+  genreValue: { value: EGenre.all, label: "Все жанры" },
   ratingValue: { value: "allRatings", label: "Любой рейтинг" },
-  statusValue: null,
+  statusValue: { value: EStatus.all, label: "Все статусы" },
   startYear: null,
   endYear: null,
-  sortBy: ESortField.title,
-  sortingOrder: ESortOrder.desc,
+  sortBy: { value: ESortField.rating, label: "Рейтингу" },
+  sortingOrder: { value: ESortOrder.desc, label: "По убыванию" },
   searchString: "",
   page: 1,
   pageSize: 8,
@@ -33,12 +38,10 @@ const filterSlice = createSlice({
   reducers: {
     setGenreValue: (
       state,
-      action: PayloadAction<EGenre | null>,
+      action: PayloadAction<{ value: EGenre; label: string }>,
     ) => {
-      if (Number.isNaN(action.payload)) {
-        state.genreValue = null;
-      }
-      state.genreValue = action.payload;
+      state.genreValue.value = action.payload.value;
+      state.genreValue.label = action.payload.label;
     },
     setRatingValue: (
       state,
@@ -48,12 +51,10 @@ const filterSlice = createSlice({
     },
     setStatusValue: (
       state,
-      action: PayloadAction<EStatus | null>,
+      action: PayloadAction<{ value: EStatus; label: string }>,
     ) => {
-      if (Number.isNaN(action.payload)) {
-        state.statusValue = null;
-      }
-      state.statusValue = action.payload;
+      state.statusValue.value = action.payload.value;
+      state.statusValue.label = action.payload.label;
     },
     setStartYear: (state, action: PayloadAction<number | null>) => {
       state.startYear = action.payload;
@@ -63,15 +64,17 @@ const filterSlice = createSlice({
     },
     setSortBy: (
       state,
-      action: PayloadAction<ESortField>,
+      action: PayloadAction<{ value: ESortField; label: string }>,
     ) => {
-      state.sortBy = action.payload;
+      state.sortBy.value = action.payload.value;
+      state.sortBy.label = action.payload.label;
     },
     setSortingOrder: (
       state,
-      action: PayloadAction<ESortOrder>,
+      action: PayloadAction<{ value: ESortOrder; label: string }>,
     ) => {
-      state.sortingOrder = action.payload;    
+      state.sortingOrder.value = action.payload.value;
+      state.sortingOrder.label = action.payload.label;
     },
     setSearchString: (state, action: PayloadAction<string>) => {
       state.searchString = action.payload;
@@ -81,7 +84,7 @@ const filterSlice = createSlice({
     },
     setPageSize: (state, action: PayloadAction<number>) => {
       state.pageSize = action.payload;
-    }
+    },
   },
 });
 
