@@ -7,7 +7,7 @@ interface MainState {
   isLoading: boolean;
   films: GetFilmsSuccessResponseType["data"];
   filmStatistic: {
-    total: number | null;
+    total: number | undefined;
     averageRating: number | null;
     watched: number | null;
   };
@@ -17,7 +17,7 @@ const initialState: MainState = {
   isLoading: true,
   films: [],
   filmStatistic: {
-    total: null,
+    total: undefined,
     averageRating: null,
     watched: null,
   },

@@ -35,7 +35,7 @@ class FilmsService implements FilmsAPI {
     try{
       const response = await fetch(`${BASE_URL}/createFilm`, {
         method: "POST",
-        body: JSON.stringify(body),
+        body: JSON.stringify(body.body),
         headers: {
           "Content-type": "application/json",
         },

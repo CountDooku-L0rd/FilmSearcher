@@ -23,7 +23,7 @@ const SortingSection = () => {
     status: EStatus;
   }) => {
     try {
-      await filmService.createFilm(body['body']);
+      await filmService.createFilm({body});
       getFilms();
     } catch (error) {
       console.error(error);

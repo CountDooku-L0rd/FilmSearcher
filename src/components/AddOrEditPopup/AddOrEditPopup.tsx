@@ -1,4 +1,9 @@
-import { useCallback, useEffect, useState } from "react";
+import {
+  useEffect,
+  useState,
+  type FormEvent,
+  type MouseEventHandler,
+} from "react";
 import { createPortal } from "react-dom";
 import type { AddOrEditPopupProps } from "./props/AddOrEditPopupProps";
 import CustomSelect from "../CustomSelector/CustomSelect";
@@ -7,7 +12,7 @@ import CustomCheckbox from "../CustomCheckbox/CustomCheckbox";
 import { EGenre, EStatus } from "@yp-mentor/films-server-types";
 
 const AddOrEditPopup = ({
-  data = null,
+  data,
   onClose,
   onSubmit,
   isModalOpen,
@@ -31,7 +36,7 @@ const AddOrEditPopup = ({
     rating: "",
   });
   useEffect(() => {
-    const handleKeyDown = (event) => {
+    const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape" && isModalOpen) {
         onClose();
       }
@@ -43,14 +48,14 @@ const AddOrEditPopup = ({
       document.body.style.overflow = "unset";
     }
     return () => {
-      document.removeEventListener("click", handleKeyDown);
+      document.removeEventListener("click", handleKeyDown as EventListener);
       document.body.style.overflow = "unset";
     };
   }, [isModalOpen]);
 
-  const loadData = useCallback(() => {
+  useEffect(() => {
     if (!data) return;
-
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setTitle(data.title);
     setYear(data.year.toString());
     setDirector(data.director);
@@ -60,13 +65,11 @@ const AddOrEditPopup = ({
       value: data.status,
       label: data.status === EStatus.in_plans ? "В планах" : "Просмотрено",
     });
-    setImage(data.image);
-    setDescription(data.description);
+    setImage(data.image || "");
+    setDescription(data.description || "");
   }, [data]);
 
-  loadData()
-  
-  const handleOverlayClick = (event) => {
+  const handleOverlayClick: MouseEventHandler<HTMLDivElement> = (event) => {
     if (event.target === event.currentTarget) {
       onClose();
     }
@@ -116,14 +119,14 @@ const AddOrEditPopup = ({
   const isFormValid =
     !titleError && !yearError && !directorError && !genresError && !ratingError;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!isFormValid) {
       alert("Пожалуйста, исправьте ошибки в форме");
       return;
     }
-
+    
     onSubmit(
       {
         title: title,
@@ -290,7 +293,7 @@ const AddOrEditPopup = ({
         </div>
       </form>
     </div>,
-    document.getElementById("modal"),
+    document.getElementById("modal")!,
   );
 };
 

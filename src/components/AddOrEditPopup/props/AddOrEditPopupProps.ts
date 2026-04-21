@@ -14,18 +14,15 @@ export interface AddOrEditPopupProps {
     status: EStatus;
   };
   onClose: () => void;
-  onSubmit: (
-    body: {
-      title: string;
-      director: string;
-      year: number;
-      genres: EGenre[];
-      description?: string;
-      image?: string;
-      rating: number;
-      status: EStatus;
-    },
-    id?: string,
-  ) => void;
+  onSubmit: (data: {
+    title: string;
+    director: string;
+    year: number;
+    genres: EGenre[];
+    description?: string;
+    image?: string;
+    rating: number;
+    status: EStatus;
+  }, id?: string) => void | Promise<void>;
   isModalOpen: boolean;
 }

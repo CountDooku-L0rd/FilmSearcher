@@ -4,5 +4,5 @@ export interface FilmButtonProps {
     id: number,
     type: string,
     status?: EStatus,
-    onClick: (id: number, status?: EStatus) => void
+    onClick: (id: number, status?: EStatus) => Promise<void> | void
 }

@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from "./hooks/storeHooks.ts";
 import { useEffect, useState } from "react";
 import { PrimeReactProvider } from "primereact/api";
 import "primereact/resources/themes/mira/theme.css";
-import { Paginator } from "primereact/paginator";
+import { Paginator, type PaginatorPageChangeEvent } from "primereact/paginator";
 import { setPage, setPageSize } from "./store/filterSlice.ts";
 
 function App() {
@@ -27,8 +27,7 @@ function App() {
     sortingOrder,
     startYear,
   } = useAppSelector((store) => store.filter);
-  const onPageChange = (event) => {
-    console.log(event);
+  const onPageChange = (event: PaginatorPageChangeEvent) => {
     dispatch(setPage(event.page + 1));
     setFirst(event.first);
     dispatch(setPageSize(event.rows));

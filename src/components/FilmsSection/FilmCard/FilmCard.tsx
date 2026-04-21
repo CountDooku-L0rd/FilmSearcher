@@ -23,7 +23,7 @@ const FilmCard = ({
     }
   };
 
-  const handleStatusClick = async (id: number, status: EStatus) => {
+  const handleStatusClick = async (id: number, status?: EStatus) => {
     try {
       await filmService.changeFilmStatus({
         body: {
@@ -47,15 +47,17 @@ const FilmCard = ({
       director: string;
       year: number;
       genres: EGenre[];
-      description?: string;
-      image?: string;
+      description?: string | undefined;
+      image?: string | undefined;
       rating: number;
       status: EStatus;
     },
-    id?: string,
+    id?: string | undefined,
   ) => {
     try {
-      await filmService.updateFilm({ body, id });
+      if (id) {
+        await filmService.updateFilm({ body, id });
+      }
       getFilms();
     } catch (error) {
       console.error(error);
@@ -71,6 +73,7 @@ const FilmCard = ({
     [EGenre.melodrama]: "Мелодрама",
     [EGenre.adventure]: "Приключение",
     [EGenre.detective]: "Детектив",
+    [EGenre.all]: "Все жанры",
   };
   const [tooltipVisible, setTooltipVisible] = useState(false);
 
