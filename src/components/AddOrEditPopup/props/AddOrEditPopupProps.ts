@@ -23,6 +23,6 @@ export interface AddOrEditPopupProps {
     image?: string;
     rating: number;
     status: EStatus;
-  }, id?: string) => void | Promise<void>;
+  }, id?: string) => Promise<void>;
   isModalOpen: boolean;
 }

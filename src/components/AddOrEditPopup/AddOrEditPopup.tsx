@@ -139,8 +139,13 @@ const AddOrEditPopup = ({
         status: status.value,
       },
       data ? data.id.toString() : undefined,
-    );
-    onClose();
+    )
+      .then(() => {
+        onClose();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return createPortal(

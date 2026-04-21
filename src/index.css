@@ -47,7 +47,7 @@ body {
 .popup_content {
   position: relative;
   display: flex;
-  flex-direcction: column;
+  flex-direction: column;
   align-items: center;
   gap:20px;
   width: 600px;

@@ -25,8 +25,12 @@ const SortingSection = () => {
     try {
       await filmService.createFilm({body});
       getFilms();
-    } catch (error) {
-      console.error(error);
+    } catch (err: unknown){
+      if (err instanceof Error){
+        throw new Error(err.message);
+      } else{
+        throw err;
+      }
     }
   };
   return (
