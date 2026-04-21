@@ -5,7 +5,6 @@ import { useState } from "react";
 import FilmsService from "../../../api/FilmsService.ts";
 import { useGetFilms } from "../../../hooks/useGetFilms.ts";
 import AddOrEditPopup from "../../AddOrEditPopup/AddOrEditPopup.tsx";
-import { useAppDispatch } from "../../../hooks/storeHooks.ts";
 
 const FilmCard = ({
   film,
@@ -13,7 +12,6 @@ const FilmCard = ({
   film: Awaited<ReturnType<FilmsAPI["getFilms"]>>["data"][number];
 }) => {
   const filmService = new FilmsService();
-  const dispatch = useAppDispatch();
   const { getFilms } = useGetFilms();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleDeleteClick = async (id: number) => {

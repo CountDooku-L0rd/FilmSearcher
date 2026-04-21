@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import type { AddOrEditPopupProps } from "./props/AddOrEditPopupProps";
 import CustomSelect from "../CustomSelector/CustomSelect";
@@ -48,30 +48,24 @@ const AddOrEditPopup = ({
     };
   }, [isModalOpen]);
 
-  useEffect(() => {
-    if (data) {
-      setTitle(data.title);
-      setYear(data.year.toString());
-      setDirector(data.director);
-      setGenres(data.genres || []);
-      setRating(data.rating.toString());
-      setStatus({
-        value: data.status,
-        label: data.status === EStatus.in_plans ? "В планах" : "Просмотрено",
-      });
-      setImage(data.image);
-      setDescription(data.description);
-    }
-    setErrors({
-      title: "",
-      year: "",
-      director: "",
-      genres: "",
-      rating: "",
+  const loadData = useCallback(() => {
+    if (!data) return;
+
+    setTitle(data.title);
+    setYear(data.year.toString());
+    setDirector(data.director);
+    setGenres(data.genres || []);
+    setRating(data.rating.toString());
+    setStatus({
+      value: data.status,
+      label: data.status === EStatus.in_plans ? "В планах" : "Просмотрено",
     });
-    return;
+    setImage(data.image);
+    setDescription(data.description);
   }, [data]);
 
+  loadData()
+  
   const handleOverlayClick = (event) => {
     if (event.target === event.currentTarget) {
       onClose();
