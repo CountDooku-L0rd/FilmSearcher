@@ -1,12 +1,11 @@
 import {
   useMemo,
   useState,
-  type MouseEventHandler,
   type SyntheticEvent,
 } from "react";
 import { createPortal } from "react-dom";
 import type { AddOrEditPopupTypes } from "./types/AddOrEditPopupTypes";
-import CustomSelect from "../CustomSelector/CustomSelect";
+import CustomSelect from "../CustomSelect/CustomSelect";
 import { addStatusOptions, genreOptions } from "../../constants/constants";
 import CustomCheckbox from "../CustomCheckbox/CustomCheckbox";
 import { EGenre, EStatus } from "@yp-mentor/films-server-types";
@@ -42,8 +41,8 @@ const AddOrEditPopup = ({
           label: "В планах",
         },
   );
-  const [image, setImage] = useState(data ? data.image : '');
-  const [description, setDescription] = useState(data ? data.description : '');
+  const [image, setImage] = useState(data ? data.image : "");
+  const [description, setDescription] = useState(data ? data.description : "");
   const [errors, setErrors] = useState({
     title: "",
     year: "",
@@ -53,22 +52,13 @@ const AddOrEditPopup = ({
   });
   const [isRequesting, setIsRequesting] = useState(false);
 
-  useClickEscape(onClose, isModalOpen)
-
-  const handleOverlayClick: MouseEventHandler<HTMLDivElement> = (event) => {
-    if (event.target === event.currentTarget) {
-      onClose();
-    }
-  };
+  useClickEscape(onClose, isModalOpen);
 
   const titleError = useMemo(
     () => validateTitle(title),
     [title, validateTitle],
   );
-  const yearError = useMemo(
-    () => validateYear(year),
-     [year, validateYear]
-  );
+  const yearError = useMemo(() => validateYear(year), [year, validateYear]);
   const directorError = useMemo(
     () => validateDirector(director),
     [director, validateDirector],
@@ -88,10 +78,6 @@ const AddOrEditPopup = ({
   const handleSubmit = (e: SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
     e.preventDefault();
 
-    if (!isFormValid) {
-      alert("Пожалуйста, исправьте ошибки в форме");
-      return;
-    }
     setIsRequesting(true);
     onSubmit(
       {
@@ -123,7 +109,14 @@ const AddOrEditPopup = ({
   };
 
   return createPortal(
-    <div className="popup_container" onClick={handleOverlayClick}>
+    <div
+      className="popup_container"
+      onClick={(event) => {
+        if (event.target === event.currentTarget) {
+          onClose();
+        }
+      }}
+    >
       <form className="popup_content" onSubmit={handleSubmit}>
         <div className="popup_title">
           <p>{data ? "Редактировать фильм" : "Добавить фильм"}</p>
@@ -229,7 +222,7 @@ const AddOrEditPopup = ({
             value={status}
             options={addStatusOptions}
             title="Статус просмотра"
-            style={{width: '250px'}}
+            style={{ width: "250px" }}
             onChange={(option: { value: EStatus; label: string }) => {
               setStatus(option);
             }}
@@ -269,7 +262,7 @@ const AddOrEditPopup = ({
           <button
             className=" button submit_button"
             type="submit"
-            disabled={isRequesting}
+            disabled={isRequesting || !isFormValid}
           >
             <p>Сохранить</p>
           </button>

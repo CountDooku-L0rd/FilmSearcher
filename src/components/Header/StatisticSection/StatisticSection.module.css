@@ -27,7 +27,7 @@
   color: var(--gray-text-color);
 }
 
-.statistic_sceleton {
+.statistic_skeleton {
   width: 26px;
   height: 26px;
   border-radius: 9999px;
@@ -35,7 +35,7 @@
   margin-bottom: 5px;
 }
 
-.statistic_field_sceleton {
+.statistic_field_skeleton {
   width: 122px;
   height: 26px;
   border-radius: 8px;

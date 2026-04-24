@@ -3,7 +3,7 @@
     align-items: center;
 }
 
-.sceleton{
+.skeleton{
     width: 1200px;
     height: 40px;
     background: linear-gradient(#EDEDED, #EAEAEA);

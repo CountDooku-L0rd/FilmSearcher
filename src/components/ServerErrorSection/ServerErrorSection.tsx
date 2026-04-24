@@ -6,10 +6,6 @@ import styles from "./ServerErrorSection.module.css";
 const ServerErrorSection = () => {
   const dispatch = useAppDispatch();
   const { getFilms } = useGetFilms();
-  const onClickHandler = () => {
-    dispatch(setServerError(false));
-    getFilms();
-  };
   return (
     <div className={styles.container}>
       <div className={styles.server_error_svg}></div>
@@ -17,7 +13,13 @@ const ServerErrorSection = () => {
         При загрузке данных произошла ошибка. Мы уже работаем над её
         устранением. Повторите попытку позже.
       </p>
-      <button className={styles.button} onClick={onClickHandler}>
+      <button
+        className={styles.button}
+        onClick={() => {
+          dispatch(setServerError(false));
+          getFilms();
+        }}
+      >
         Повторить попытку
       </button>
     </div>

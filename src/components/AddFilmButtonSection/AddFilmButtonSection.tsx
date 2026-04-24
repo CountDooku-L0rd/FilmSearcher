@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useGetFilms } from "../../hooks/useGetFilms";
 import { filmService } from "../../api/FilmsService.ts";
 import { showSuccessToast } from "../../toasts/toasts";
-import styles from './AddFilmButtonSection.module.css'
+import styles from "./AddFilmButtonSection.module.css";
 
 const AddFilmButtonSection = () => {
   const [isModalOpen, setModalIsOpen] = useState(false);
@@ -22,7 +22,7 @@ const AddFilmButtonSection = () => {
   }) => {
     try {
       await filmService.createFilm({ body });
-      showSuccessToast("î®´Ï¨ „·Ø•Ë≠Æ §Æ°†¢´•≠");
+      showSuccessToast("–§–∏–ª—å–º —É—Å–ø–µ—à–Ω–æ –¥–æ–±–∞–≤–ª–µ–Ω");
       getFilms();
     } catch (error: unknown) {
       throw new Error((error as Error).message);

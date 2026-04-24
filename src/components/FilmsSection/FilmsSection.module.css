@@ -8,3 +8,9 @@
     padding: 0;
     margin-top: 7px;
 }
+
+.skeleton{
+    width: 274px;
+    height: 520px;
+    background: linear-gradient(#EDEDED, #EAEAEA);
+}

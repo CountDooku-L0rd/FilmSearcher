@@ -1,21 +1,17 @@
-import { useEffect, useRef } from "react";
 import { useAppSelector } from "../../hooks/storeHooks";
 import AddFilmButtonSection from "../AddFilmButtonSection/AddFilmButtonSection";
 import SortingSection from "../SortingSection/SortingSection";
 import styles from "./ControleSection.module.css";
 
 const ControlSection = () => {
-  const { films } = useAppSelector((store) => store.main);
-  const isFirstLoading = useRef(true);
-  useEffect(() => {
-    if (films) {
-      isFirstLoading.current = false;
-    }
-  }, [films]);
+  const { filmStatistic, serverError } = useAppSelector((store) => store.main);
+  if (serverError) return null;
   return (
-    <section className={`${isFirstLoading.current ? styles.sceleton : ""} ${styles.container}`}>
-      {!isFirstLoading.current && <SortingSection />}
-      {!isFirstLoading.current && <AddFilmButtonSection />}
+    <section
+      className={`${!filmStatistic.total ? styles.skeleton : ""} ${styles.container}`}
+    >
+      {filmStatistic.total && <SortingSection />}
+      {filmStatistic.total && <AddFilmButtonSection />}
     </section>
   );
 };
