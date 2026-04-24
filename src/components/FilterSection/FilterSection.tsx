@@ -39,14 +39,14 @@ const FilterSection = () => {
     dispatch(setStatusValue(option));
     dispatch(setPage(1));
   };
-  const handleRating = (option: { value: string; label: string }) => {
+  const handleRating = (option: { value: number; label: string }) => {
     dispatch(setRatingValue({ value: option.value, label: option.label }));
     dispatch(setPage(1));
   };
   const handleClearFilters = () => {
     dispatch(setGenreValue({ value: EGenre.all, label: "Все жанры" }));
     dispatch(setStatusValue({ value: EStatus.all, label: "Все статусы" }));
-    dispatch(setRatingValue({ value: "allRatings", label: "Любой рейтинг" }));
+    dispatch(setRatingValue({ value: 0, label: "Любой рейтинг" }));
     dispatch(setStartYear(null));
     dispatch(setEndYear(null));
     dispatch(setPage(1));
@@ -70,14 +70,14 @@ const FilterSection = () => {
                 value={sortBy}
                 onChange={handleSortBy}
                 title={"Сортировать по"}
-                width={180}
+                style={{width: '180px'}}
               />
               <CustomSelector
                 options={sortingOrders}
                 value={sortingOrder}
                 onChange={handleSortOrder}
                 title={"Порядок сортировки"}
-                width={235}
+                style={{width: '235px'}}
               />
             </>
           )}
@@ -88,21 +88,21 @@ const FilterSection = () => {
                 value={genreValue}
                 onChange={handleGenre}
                 title={"Жанр"}
-                width={224}
+                style={{width: '225px'}}
               />
               <CustomSelector
                 options={statusOptions}
                 value={statusValue}
                 onChange={handleStatus}
                 title={"Статус просмотра"}
-                width={160}
+                style={{width: '160px'}}
               />
               <CustomSelector
                 options={ratingOptions}
                 value={ratingValue}
                 onChange={handleRating}
                 title={"Минимальный рейтинг"}
-                width={235}
+                style={{width: '235px'}}
               />
               <YearInput />
               <button className={styles.button} onClick={handleClearFilters}>

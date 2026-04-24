@@ -1,6 +1,6 @@
 import type { EGenre, EStatus } from "@yp-mentor/films-server-types";
 
-export interface AddOrEditPopupProps {
+export interface AddOrEditPopupTypes {
   data?: {
     id: number;
     title: string;

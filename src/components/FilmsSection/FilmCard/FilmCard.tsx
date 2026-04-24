@@ -2,23 +2,30 @@ import styles from "./FilmCard.module.css";
 import { EGenre, EStatus, type FilmsAPI } from "@yp-mentor/films-server-types";
 import FilmButton from "./FilmButton/FilmButton.tsx";
 import { useState } from "react";
-import FilmsService from "../../../api/FilmsService.ts";
+import { filmService } from "../../../api/FilmsService.ts";
 import { useGetFilms } from "../../../hooks/useGetFilms.ts";
 import AddOrEditPopup from "../../AddOrEditPopup/AddOrEditPopup.tsx";
+import { EFilmButtonTypes, genreMapping } from "../../../constants/constants.ts";
+import { showErrorToast, showSuccessToast } from "../../../toasts/toasts.ts";
 
 const FilmCard = ({
   film,
 }: {
   film: Awaited<ReturnType<FilmsAPI["getFilms"]>>["data"][number];
 }) => {
-  const filmService = new FilmsService();
   const { getFilms } = useGetFilms();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleDeleteClick = async (id: number) => {
     try {
       await filmService.deleteFilm({ id: id.toString() });
+      showSuccessToast("Фильм успешно удалён");
       getFilms();
-    } catch (error) {
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        showErrorToast(error.message);
+      } else {
+        showErrorToast(error as string);
+      }
       console.error(error);
     }
   };
@@ -32,8 +39,14 @@ const FilmCard = ({
         },
         id: id.toString(),
       });
+      showSuccessToast("Статус фильма успешно изменён");
       getFilms();
-    } catch (error) {
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        showErrorToast(error.message);
+      } else {
+        showErrorToast(error as string);
+      }
       console.error(error);
     }
   };
@@ -58,22 +71,11 @@ const FilmCard = ({
       if (id) {
         await filmService.updateFilm({ body, id });
       }
+      showSuccessToast('Данные фильма успешно изменены')
       getFilms();
-    } catch (error) {
-      console.error(error);
+    } catch (error: unknown) {
+      throw new Error ((error as Error).message)
     }
-  };
-  const genreMapping = {
-    [EGenre.drama]: "Драма",
-    [EGenre.comedy]: "Комедия",
-    [EGenre.action]: "Экшен",
-    [EGenre.fantasy]: "Фэнтези",
-    [EGenre.thriller]: "Триллер",
-    [EGenre.horror]: "Хоррор",
-    [EGenre.melodrama]: "Мелодрама",
-    [EGenre.adventure]: "Приключение",
-    [EGenre.detective]: "Детектив",
-    [EGenre.all]: "Все жанры",
   };
   const [tooltipVisible, setTooltipVisible] = useState(false);
 
@@ -130,11 +132,19 @@ const FilmCard = ({
       </div>
       <div className={styles.line}></div>
       <div className={styles.buttons}>
-        <FilmButton id={film.id} type={"edit"} onClick={handleEditClick} />
-        <FilmButton id={film.id} type={"delete"} onClick={handleDeleteClick} />
         <FilmButton
           id={film.id}
-          type={"status"}
+          type={EFilmButtonTypes.edit}
+          onClick={handleEditClick}
+        />
+        <FilmButton
+          id={film.id}
+          type={EFilmButtonTypes.delete}
+          onClick={handleDeleteClick}
+        />
+        <FilmButton
+          id={film.id}
+          type={EFilmButtonTypes.status}
           status={film.status}
           onClick={handleStatusClick}
         />

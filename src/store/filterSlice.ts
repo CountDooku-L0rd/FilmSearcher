@@ -8,7 +8,7 @@ import {
 
 interface FilterState {
   genreValue: { value: EGenre; label: string };
-  ratingValue: { value: string; label: string };
+  ratingValue: { value: number; label: string };
   statusValue: { value: EStatus; label: string };
   startYear: number | null;
   endYear: number | null;
@@ -21,7 +21,7 @@ interface FilterState {
 
 const initialState: FilterState = {
   genreValue: { value: EGenre.all, label: "Все жанры" },
-  ratingValue: { value: "allRatings", label: "Любой рейтинг" },
+  ratingValue: { value: 0, label: "Любой рейтинг" },
   statusValue: { value: EStatus.all, label: "Все статусы" },
   startYear: null,
   endYear: null,
@@ -40,12 +40,11 @@ const filterSlice = createSlice({
       state,
       action: PayloadAction<{ value: EGenre; label: string }>,
     ) => {
-      state.genreValue.value = action.payload.value;
-      state.genreValue.label = action.payload.label;
+      state.genreValue = action.payload
     },
     setRatingValue: (
       state,
-      action: PayloadAction<{ value: string; label: string }>,
+      action: PayloadAction<{ value: number; label: string }>,
     ) => {
       state.ratingValue = action.payload;
     },
@@ -53,8 +52,7 @@ const filterSlice = createSlice({
       state,
       action: PayloadAction<{ value: EStatus; label: string }>,
     ) => {
-      state.statusValue.value = action.payload.value;
-      state.statusValue.label = action.payload.label;
+      state.statusValue = action.payload
     },
     setStartYear: (state, action: PayloadAction<number | null>) => {
       state.startYear = action.payload;
@@ -66,15 +64,13 @@ const filterSlice = createSlice({
       state,
       action: PayloadAction<{ value: ESortField; label: string }>,
     ) => {
-      state.sortBy.value = action.payload.value;
-      state.sortBy.label = action.payload.label;
+      state.sortBy = action.payload
     },
     setSortingOrder: (
       state,
       action: PayloadAction<{ value: ESortOrder; label: string }>,
     ) => {
-      state.sortingOrder.value = action.payload.value;
-      state.sortingOrder.label = action.payload.label;
+      state.sortingOrder = action.payload
     },
     setSearchString: (state, action: PayloadAction<string>) => {
       state.searchString = action.payload;

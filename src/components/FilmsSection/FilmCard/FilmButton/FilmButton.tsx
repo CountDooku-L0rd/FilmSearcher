@@ -1,9 +1,11 @@
+import { EStatus } from '@yp-mentor/films-server-types'
+import { EFilmButtonTypes } from '../../../../constants/constants.ts'
 import styles from './FilmButton.module.css'
-import type {FilmButtonProps} from './props/FilmButtonProps.ts'
+import type {FilmButtonTypes} from './types/FilmButtonTypes.ts'
 
-const FilmButton = ({id, type, status, onClick}: FilmButtonProps) => {
+const FilmButton = ({id, type, status, onClick}: FilmButtonTypes) => {
     return (
-        <button className={`${styles.button} ${type === 'edit' ? styles.edit : (type === 'delete' ? styles.delete : (status === 'watched' ? styles.watched : styles.in_plans))}`}
+        <button className={`${styles.button} ${type === EFilmButtonTypes.edit ? styles.edit : (type === EFilmButtonTypes.delete ? styles.delete : (status === EStatus.watched ? styles.watched : styles.in_plans))}`}
                 onClick={() => {
                     onClick(id, status)
                 }}>

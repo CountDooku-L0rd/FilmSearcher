@@ -115,4 +115,4 @@ class FilmsService implements FilmsAPI {
   }
 }
 
-export default FilmsService;
+export const filmService = new FilmsService();

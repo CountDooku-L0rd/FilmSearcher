@@ -1,6 +1,6 @@
-import FilmsService from "../api/FilmsService.ts";
+import { filmService } from "../api/FilmsService.ts";
 import {useAppDispatch, useAppSelector} from "./storeHooks.ts";
-import { setFilms, setStatistic, setIsLoading } from "../store/mainSlice.ts";
+import { setFilms, setStatistic, setIsLoading, setPagination, setServerError } from "../store/mainSlice.ts";
 import type {FilmsAPI} from "@yp-mentor/films-server-types";
 
 type GetFilmsRequestType = Parameters<FilmsAPI['getFilms']>[0];
@@ -12,7 +12,7 @@ export function useGetFilms() {
     const body: GetFilmsRequestType['body'] = {
         filters:{
           genre: genreValue.value,
-          minRating: ratingValue.value==='allRatings' ? undefined : parseInt(ratingValue.value),
+          minRating: ratingValue.value===0 ? undefined : ratingValue.value,
           status: statusValue.value,
           yearRange: startYear ? {
             from: startYear,
@@ -33,13 +33,14 @@ export function useGetFilms() {
           pageSize: pageSize,
         },
     }
-    const filmsService = new FilmsService();
-    filmsService.getFilms({body})
+    filmService.getFilms({body})
       .then((result) => {
         dispatch(setFilms(result.data));
         dispatch(setStatistic(result.statistic));
+        dispatch(setPagination(result.pagination))
       })
       .catch((err: Error) => {
+        dispatch(setServerError(true))
         console.error(err.message);
       })
       .finally(() => {

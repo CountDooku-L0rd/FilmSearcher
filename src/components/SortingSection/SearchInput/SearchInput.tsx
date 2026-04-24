@@ -13,6 +13,7 @@ const SearchInput = () => {
   const handleClick = () => {
     setIsEmpty(true);
     dispatch(setSearchString(""));
+    setValue('')
   };
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (timeoutRef.current){

@@ -31,18 +31,18 @@ export const addStatusOptions: { value: EStatus; label: string }[] = [
   { value: EStatus.in_plans, label: "В планах" },
 ];
 
-export const ratingOptions: { value: string; label: string }[] = [
-  { value: "anyRating", label: "Любой рейтинг" },
-  { value: "1", label: "1" },
-  { value: "2", label: "2" },
-  { value: "3", label: "3" },
-  { value: "4", label: "4" },
-  { value: "5", label: "5" },
-  { value: "6", label: "6" },
-  { value: "7", label: "7" },
-  { value: "8", label: "8" },
-  { value: "9", label: "9" },
-  { value: "10", label: "10" },
+export const ratingOptions: { value: number; label: string }[] = [
+  { value: 0, label: "Любой рейтинг" },
+  { value: 1, label: "1" },
+  { value: 2, label: "2" },
+  { value: 3, label: "3" },
+  { value: 4, label: "4" },
+  { value: 5, label: "5" },
+  { value: 6, label: "6" },
+  { value: 7, label: "7" },
+  { value: 8, label: "8" },
+  { value: 9, label: "9" },
+  { value: 10, label: "10" },
 ];
 
 export const sortingBy: { value: ESortField; label: string }[] = [
@@ -56,3 +56,22 @@ export const sortingOrders: { value: ESortOrder; label: string }[] = [
   { value: ESortOrder.desc, label: "По убыванию" },
   { value: ESortOrder.asc, label: "По возрастанию" },
 ];
+
+export enum EFilmButtonTypes {
+  edit = 'edit',
+  delete = 'delete',
+  status = 'status',
+}
+
+export const genreMapping = {
+    [EGenre.drama]: "Драма",
+    [EGenre.comedy]: "Комедия",
+    [EGenre.action]: "Экшен",
+    [EGenre.fantasy]: "Фэнтези",
+    [EGenre.thriller]: "Триллер",
+    [EGenre.horror]: "Хоррор",
+    [EGenre.melodrama]: "Мелодрама",
+    [EGenre.adventure]: "Приключение",
+    [EGenre.detective]: "Детектив",
+    [EGenre.all]: "Все жанры",
+  };

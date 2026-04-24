@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import type {FilmsAPI} from "@yp-mentor/films-server-types";
+import type { FilmsAPI } from "@yp-mentor/films-server-types";
 
-type GetFilmsSuccessResponseType = Awaited<ReturnType<FilmsAPI['getFilms']>>;
+type GetFilmsSuccessResponseType = Awaited<ReturnType<FilmsAPI["getFilms"]>>;
 interface MainState {
   isLoading: boolean;
   films: GetFilmsSuccessResponseType["data"];
@@ -11,6 +11,8 @@ interface MainState {
     averageRating: number | null;
     watched: number | null;
   };
+  pagination: GetFilmsSuccessResponseType["pagination"];
+  serverError: boolean;
 }
 
 const initialState: MainState = {
@@ -21,6 +23,12 @@ const initialState: MainState = {
     averageRating: null,
     watched: null,
   },
+  pagination: {
+    currentPage: 1,
+    pageSize: 8,
+    total: 0,
+  },
+  serverError: false,
 };
 
 const mainSlice = createSlice({
@@ -30,15 +38,36 @@ const mainSlice = createSlice({
     setIsLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload;
     },
-    setFilms: (state, action: PayloadAction<GetFilmsSuccessResponseType["data"]>) => {
+    setFilms: (
+      state,
+      action: PayloadAction<GetFilmsSuccessResponseType["data"]>,
+    ) => {
       state.films = action.payload;
     },
-    setStatistic: (state, action: PayloadAction<GetFilmsSuccessResponseType["statistic"]>) => {
+    setStatistic: (
+      state,
+      action: PayloadAction<GetFilmsSuccessResponseType["statistic"]>,
+    ) => {
       state.filmStatistic = action.payload;
+    },
+    setPagination: (
+      state,
+      action: PayloadAction<GetFilmsSuccessResponseType["pagination"]>,
+    ) => {
+      state.pagination = action.payload;
+    },
+    setServerError: (state, action: PayloadAction<boolean>) => {
+      state.serverError = action.payload;
     },
   },
 });
 
-export const { setIsLoading, setFilms, setStatistic } = mainSlice.actions;
+export const {
+  setIsLoading,
+  setFilms,
+  setStatistic,
+  setPagination,
+  setServerError,
+} = mainSlice.actions;
 
 export default mainSlice.reducer;

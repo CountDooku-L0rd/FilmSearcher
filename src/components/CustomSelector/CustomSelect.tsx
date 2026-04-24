@@ -1,15 +1,15 @@
 import styles from "./CustomSelect.module.css";
-import type { CustomSelectProps } from "./props/CustomSelectProps.ts";
+import type { CustomSelectTypes } from "./types/CustomSelectTypes.ts";
 import { useClickOutside } from "../../hooks/useClickOutside.ts";
 import { useState } from "react";
 
-const CustomSelect = <T extends string>({
+const CustomSelect = <T,>({
   options,
   value,
   onChange,
   title,
-  width,
-}: CustomSelectProps<T>) => {
+  style,
+}: CustomSelectTypes<T>) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const ref = useClickOutside<HTMLDivElement>(() => {
@@ -36,7 +36,7 @@ const CustomSelect = <T extends string>({
       <div
         className={styles.selector_input}
         onClick={handleTriggerClick}
-        style={{ width }}
+        style={{...style}}
       >
         <span>{value.label}</span>
         <span
@@ -48,7 +48,6 @@ const CustomSelect = <T extends string>({
           {options.map((option) => (
             <li
               className={`${styles.selector_elem} ${value.label === option.label ? styles.selector_elem_active : false}`}
-              key={option.value}
               onClick={() => handleCustomSelect(option)}
             >
               {option.label}

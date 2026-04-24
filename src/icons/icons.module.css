@@ -1,0 +1,15 @@
+.success {
+  width: 20px;
+  height: 20px;
+  background-image: url("../assets/Info.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.error {
+  width: 20px;
+  height: 20px;
+  background-image: url("../assets/error.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+}

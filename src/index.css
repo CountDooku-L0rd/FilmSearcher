@@ -133,6 +133,12 @@ body {
   cursor: pointer;
 }
 
+.button:disabled{
+  border: 1px solid var(--placeholder-text-color);
+  background-color: var(--border-color);
+  color: var(--placeholder-text-color);
+}
+
 .button_container {
   width: 536px;
   display: flex;

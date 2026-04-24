@@ -1,33 +1,49 @@
 import {
-  useEffect,
+  useMemo,
   useState,
-  type FormEvent,
   type MouseEventHandler,
+  type SyntheticEvent,
 } from "react";
 import { createPortal } from "react-dom";
-import type { AddOrEditPopupProps } from "./props/AddOrEditPopupProps";
+import type { AddOrEditPopupTypes } from "./types/AddOrEditPopupTypes";
 import CustomSelect from "../CustomSelector/CustomSelect";
 import { addStatusOptions, genreOptions } from "../../constants/constants";
 import CustomCheckbox from "../CustomCheckbox/CustomCheckbox";
 import { EGenre, EStatus } from "@yp-mentor/films-server-types";
+import { showErrorToast } from "../../toasts/toasts";
+import {
+  validateDirector,
+  validateGenres,
+  validateRating,
+  validateTitle,
+  validateYear,
+} from "./validation";
+import { useClickEscape } from "../../hooks/useClickEscape";
 
 const AddOrEditPopup = ({
   data,
   onClose,
   onSubmit,
   isModalOpen,
-}: AddOrEditPopupProps) => {
-  const [title, setTitle] = useState("");
-  const [year, setYear] = useState("");
-  const [director, setDirector] = useState("");
-  const [genres, setGenres] = useState<EGenre[]>([]);
-  const [rating, setRating] = useState("");
-  const [status, setStatus] = useState({
-    value: EStatus.in_plans,
-    label: "В планах",
-  });
-  const [image, setImage] = useState("");
-  const [description, setDescription] = useState("");
+}: AddOrEditPopupTypes) => {
+  const [title, setTitle] = useState(data ? data.title : "");
+  const [year, setYear] = useState(data ? data.year.toString() : "");
+  const [director, setDirector] = useState(data ? data.director : "");
+  const [genres, setGenres] = useState<EGenre[]>(data ? data.genres : []);
+  const [rating, setRating] = useState(data ? data.rating.toString() : "");
+  const [status, setStatus] = useState(
+    data
+      ? {
+          value: data.status,
+          label: data.status === EStatus.in_plans ? "В планах" : "Просмотрено",
+        }
+      : {
+          value: EStatus.in_plans,
+          label: "В планах",
+        },
+  );
+  const [image, setImage] = useState(data ? data.image : '');
+  const [description, setDescription] = useState(data ? data.description : '');
   const [errors, setErrors] = useState({
     title: "",
     year: "",
@@ -35,98 +51,48 @@ const AddOrEditPopup = ({
     genres: "",
     rating: "",
   });
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && isModalOpen) {
-        onClose();
-      }
-    };
-    if (isModalOpen) {
-      document.addEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-    return () => {
-      document.removeEventListener("click", handleKeyDown as EventListener);
-      document.body.style.overflow = "unset";
-    };
-  }, [isModalOpen]);
+  const [isRequesting, setIsRequesting] = useState(false);
 
-  useEffect(() => {
-    if (!data) return;
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setTitle(data.title);
-    setYear(data.year.toString());
-    setDirector(data.director);
-    setGenres(data.genres || []);
-    setRating(data.rating.toString());
-    setStatus({
-      value: data.status,
-      label: data.status === EStatus.in_plans ? "В планах" : "Просмотрено",
-    });
-    setImage(data.image || "");
-    setDescription(data.description || "");
-  }, [data]);
+  useClickEscape(onClose, isModalOpen)
 
   const handleOverlayClick: MouseEventHandler<HTMLDivElement> = (event) => {
     if (event.target === event.currentTarget) {
       onClose();
     }
   };
-  if (!isModalOpen) return null;
 
-  const validateTitle = (value: string) => {
-    if (!value.trim()) return "Необходимо указать название фильма";
-    return "";
-  };
-
-  const validateYear = (value: string) => {
-    if (!value) return "Необходимо указать год выпуска";
-    const year = parseInt(value);
-    const currentYear = new Date().getFullYear();
-    if (isNaN(year)) return "Введите корректный год";
-    if (year < 1900) return "Год должен быть не раньше 1900";
-    if (year > currentYear) return `Год не может быть больше ${currentYear}`;
-    return "";
-  };
-
-  const validateDirector = (value: string) => {
-    if (!value.trim()) return "Необходимо указать режиссера";
-    return "";
-  };
-
-  const validateGenres = (value: EGenre[]) => {
-    if (!value || value.length === 0)
-      return "Необходимо указать хотя бы один жанр";
-    return "";
-  };
-
-  const validateRating = (value: string) => {
-    if (!value) return "Необходимо указать рейтинг";
-    const ratingNum = parseFloat(value);
-    if (ratingNum < 1) return "Рейтинг должен быть от 1 до 10";
-    if (ratingNum > 10) return "Рейтинг должен быть от 1 до 10";
-    return "";
-  };
-
-  const titleError = validateTitle(title);
-  const yearError = validateYear(year);
-  const directorError = validateDirector(director);
-  const genresError = validateGenres(genres);
-  const ratingError = validateRating(rating);
+  const titleError = useMemo(
+    () => validateTitle(title),
+    [title, validateTitle],
+  );
+  const yearError = useMemo(
+    () => validateYear(year),
+     [year, validateYear]
+  );
+  const directorError = useMemo(
+    () => validateDirector(director),
+    [director, validateDirector],
+  );
+  const genresError = useMemo(
+    () => validateGenres(genres),
+    [genres, validateGenres],
+  );
+  const ratingError = useMemo(
+    () => validateRating(rating),
+    [rating, validateRating],
+  );
 
   const isFormValid =
     !titleError && !yearError && !directorError && !genresError && !ratingError;
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
     e.preventDefault();
 
     if (!isFormValid) {
       alert("Пожалуйста, исправьте ошибки в форме");
       return;
     }
-
+    setIsRequesting(true);
     onSubmit(
       {
         title: title,
@@ -143,8 +109,16 @@ const AddOrEditPopup = ({
       .then(() => {
         onClose();
       })
-      .catch((error) => {
+      .catch((error: unknown) => {
+        if (error instanceof Error) {
+          showErrorToast(error.message);
+        } else {
+          showErrorToast(error as string);
+        }
         console.error(error);
+      })
+      .finally(() => {
+        setIsRequesting(false);
       });
   };
 
@@ -255,7 +229,7 @@ const AddOrEditPopup = ({
             value={status}
             options={addStatusOptions}
             title="Статус просмотра"
-            width={250}
+            style={{width: '250px'}}
             onChange={(option: { value: EStatus; label: string }) => {
               setStatus(option);
             }}
@@ -292,7 +266,11 @@ const AddOrEditPopup = ({
           >
             <p>Отмена</p>
           </button>
-          <button className=" button submit_button" type="submit">
+          <button
+            className=" button submit_button"
+            type="submit"
+            disabled={isRequesting}
+          >
             <p>Сохранить</p>
           </button>
         </div>

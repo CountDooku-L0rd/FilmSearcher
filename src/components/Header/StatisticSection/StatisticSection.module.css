@@ -27,20 +27,17 @@
   color: var(--gray-text-color);
 }
 
-.statistic_preloader{
-  width: 35px;
-  height: 35px;
-  background-image: url(../../../assets/preloader.svg);
-  background-size: contain;
-  background-repeat: no-repeat;
-  animation: s_preloader 1.5s linear infinite;
+.statistic_sceleton {
+  width: 26px;
+  height: 26px;
+  border-radius: 9999px;
+  background: linear-gradient(#ededed, #eaeaea);
+  margin-bottom: 5px;
 }
 
-@keyframes s_preloader{
-  from{
-    transform: rotate(0deg);
-  }
-  to{
-    transform: rotate(360deg);
-  }
+.statistic_field_sceleton {
+  width: 122px;
+  height: 26px;
+  border-radius: 8px;
+  background: linear-gradient(#ededed, #eaeaea);
 }

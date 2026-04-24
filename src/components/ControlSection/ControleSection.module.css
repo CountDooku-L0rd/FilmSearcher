@@ -1,0 +1,13 @@
+.container{
+    display: flex;
+    align-items: center;
+}
+
+.sceleton{
+    width: 1200px;
+    height: 40px;
+    background: linear-gradient(#EDEDED, #EAEAEA);
+    border-radius: 8px;
+    margin-top: 42px;
+    margin-bottom: 25px;
+}
