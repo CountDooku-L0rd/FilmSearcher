@@ -1,4 +1,4 @@
-import { type ChangeEvent, useCallback, useState } from "react";
+import { type ChangeEvent, useState } from "react";
 import styles from "./SearchInput.module.css";
 import { useAppDispatch } from "../../../hooks/storeHooks.ts";
 import { setSearchString } from "../../../store/filterSlice.ts";
@@ -9,12 +9,10 @@ const SearchInput = () => {
   const [value, setValue] = useState("");
   const [isEmpty, setIsEmpty] = useState(true);
 
-  const debouncedSearch = useCallback(
-    debounce((searchValue: string) => {
-      dispatch(setSearchString(searchValue));
-    }, 1000),
-    [dispatch],
-  );
+  const debouncedSearch = debounce((searchValue: string) => {
+    dispatch(setSearchString(searchValue));
+  }, 1000);
+
   const handleClick = () => {
     setIsEmpty(true);
     dispatch(setSearchString(""));
@@ -28,7 +26,7 @@ const SearchInput = () => {
       setIsEmpty(true);
     }
     setValue(newValue);
-    debouncedSearch(newValue)
+    debouncedSearch(newValue);
   };
   return (
     <div className={styles.label}>

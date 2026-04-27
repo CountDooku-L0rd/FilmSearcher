@@ -8,14 +8,6 @@
     background-size: contain;
 }
 
-.edit{
-    background-image: url("../../../../assets/edit.svg");
-}
-
-.delete{
-    background-image: url("../../../../assets/delete.svg");
-}
-
 .watched{
     background-image: url("../../../../assets/eye_on.svg");
 }

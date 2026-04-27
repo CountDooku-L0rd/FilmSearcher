@@ -1,0 +1,109 @@
+.popup_container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(245, 245, 245, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  overflow: auto;
+  overscroll-behavior: none;
+}
+
+.popup_content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap:20px;
+  width: 600px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background-color: white;
+}
+
+.popup_exit_button {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  top: 16px;
+  right: 16px;
+  border: none;
+  background-color: white;
+  background-image: url("../../assets/X.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+.popup_title {
+  margin-top: 32px;
+  width: 536px;
+  font-size: 24px;
+  line-height: 120%;
+  font-weight: 600;
+  color: var(--header-text-color);
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label_group {
+  display: flex;
+  gap: 40px;
+}
+
+.button_container {
+  width: 536px;
+  display: flex;
+  gap: 16px;
+  justify-content: end;
+  margin-bottom: 20px;
+}
+
+.button {
+  height: 40px;
+  border: 1px solid var(--button-border-color);
+  border-radius: 8px;
+  background-color: var(--button-background-color);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 100%;
+  cursor: pointer;
+}
+
+.button:disabled{
+  border: 1px solid var(--placeholder-text-color);
+  background-color: var(--border-color);
+  color: var(--placeholder-text-color);
+}
+
+.submit_button {
+  background-color: var(--add-button-bg-color);
+  border: 1px solid var(--add-button-bg-color);
+  color: white;
+}
+
+.list {
+  list-style: none;
+  width: 536px;
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 0;
+  gap: 8px;
+  padding: 0;
+}
+
+.error {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 140%;
+  color: var(--error-text-color);
+  margin-bottom: 0;
+}

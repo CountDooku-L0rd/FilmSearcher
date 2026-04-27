@@ -40,7 +40,7 @@ const CustomSelect = <T,>({
       >
         <span>{value.label}</span>
         <span
-          className={`${styles.selector_input_svg} ${isOpen ? styles.svg_reverse : false}`}
+          className={`${styles.selector_input_svg} ${isOpen ? styles.svg_reverse : ''}`}
         ></span>
       </div>
       {isOpen && (

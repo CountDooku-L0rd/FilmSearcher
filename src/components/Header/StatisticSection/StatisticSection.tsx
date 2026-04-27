@@ -2,11 +2,10 @@ import styles from "./StatisticSection.module.css";
 import { useAppSelector } from "../../../hooks/storeHooks.ts";
 
 const StatisticSection = () => {
-  const {isLoading} = useAppSelector(store => store.main)
+  const {isLoading, serverError, filmStatistic} = useAppSelector(store => store.main)
   
-  const { total, averageRating, watched } = useAppSelector(
-    (state) => state.main.filmStatistic,
-  );
+  const { total, averageRating, watched } = filmStatistic
+  if (serverError) return null;
   return (
     <>
       <ul className={styles.list}>

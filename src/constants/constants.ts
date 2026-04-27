@@ -57,21 +57,21 @@ export const sortingOrders: { value: ESortOrder; label: string }[] = [
   { value: ESortOrder.asc, label: "По возрастанию" },
 ];
 
-export enum EFilmButtonTypes {
-  edit = 'edit',
-  delete = 'delete',
-  status = 'status',
-}
-
 export const genreMapping = {
-    [EGenre.drama]: "Драма",
-    [EGenre.comedy]: "Комедия",
-    [EGenre.action]: "Экшен",
-    [EGenre.fantasy]: "Фэнтези",
-    [EGenre.thriller]: "Триллер",
-    [EGenre.horror]: "Хоррор",
-    [EGenre.melodrama]: "Мелодрама",
-    [EGenre.adventure]: "Приключение",
-    [EGenre.detective]: "Детектив",
-    [EGenre.all]: "Все жанры",
-  };
+  [EGenre.drama]: "Драма",
+  [EGenre.comedy]: "Комедия",
+  [EGenre.action]: "Экшен",
+  [EGenre.fantasy]: "Фэнтези",
+  [EGenre.thriller]: "Триллер",
+  [EGenre.horror]: "Хоррор",
+  [EGenre.melodrama]: "Мелодрама",
+  [EGenre.adventure]: "Приключение",
+  [EGenre.detective]: "Детектив",
+  [EGenre.all]: "Все жанры",
+};
+
+export const statusMapping = {
+  [EStatus.in_plans]: "В планах",
+  [EStatus.watched]: "Просмотрено",
+  [EStatus.all]: "Все статусы",
+};

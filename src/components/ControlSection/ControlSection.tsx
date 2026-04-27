@@ -1,9 +1,12 @@
-import { useAppSelector } from "../../hooks/storeHooks";
-import AddFilmButtonSection from "../AddFilmButtonSection/AddFilmButtonSection";
+import { EStatus } from "@yp-mentor/films-server-types";
+import { useAppDispatch, useAppSelector } from "../../hooks/storeHooks";
+import { setData, setIsAddModalOpen } from "../../store/modalSlice";
+import AddFilmButton from "../AddFilmButton/AddFilmButton";
 import SortingSection from "../SortingSection/SortingSection";
 import styles from "./ControleSection.module.css";
 
 const ControlSection = () => {
+  const dispatch = useAppDispatch();
   const { filmStatistic, serverError } = useAppSelector((store) => store.main);
   if (serverError) return null;
   return (
@@ -11,7 +14,25 @@ const ControlSection = () => {
       className={`${!filmStatistic.total ? styles.skeleton : ""} ${styles.container}`}
     >
       {filmStatistic.total && <SortingSection />}
-      {filmStatistic.total && <AddFilmButtonSection />}
+      {filmStatistic.total && (
+        <AddFilmButton
+          onClick={() => {
+            dispatch(setIsAddModalOpen(true));
+            dispatch(
+              setData({
+                id: -1,
+                createdAt: "",
+                director: "",
+                genres: [],
+                rating: 0,
+                status: EStatus.in_plans,
+                title: "",
+                year: 0,
+              }),
+            );
+          }}
+        />
+      )}
     </section>
   );
 };

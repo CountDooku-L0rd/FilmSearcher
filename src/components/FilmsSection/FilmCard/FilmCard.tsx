@@ -1,12 +1,16 @@
 import styles from "./FilmCard.module.css";
-import { EGenre, EStatus, type FilmsAPI } from "@yp-mentor/films-server-types";
-import FilmButton from "./FilmButton/FilmButton.tsx";
+import { EStatus, type FilmsAPI } from "@yp-mentor/films-server-types";
 import { useState } from "react";
 import { filmService } from "../../../api/FilmsService.ts";
 import { useGetFilms } from "../../../hooks/useGetFilms.ts";
-import AddOrEditPopup from "../../AddOrEditPopup/AddOrEditPopup.tsx";
-import { EFilmButtonTypes, genreMapping } from "../../../constants/constants.ts";
+
+import { genreMapping } from "../../../constants/constants.ts";
 import { showErrorToast, showSuccessToast } from "../../../toasts/toasts.ts";
+import EditFilmButton from "./EditFilmButton/EditFilmButton.tsx";
+import { useAppDispatch } from "../../../hooks/storeHooks.ts";
+import { setData, setIsEditModalOpen } from "../../../store/modalSlice.ts";
+import DeleteFilmButton from "./DeleteFilmButton/DeleteFilmButton.tsx";
+import StatusFilmButton from "./StatusFilmButton/StatusFilmButton.tsx";
 
 const FilmCard = ({
   film,
@@ -14,7 +18,7 @@ const FilmCard = ({
   film: Awaited<ReturnType<FilmsAPI["getFilms"]>>["data"][number];
 }) => {
   const { getFilms } = useGetFilms();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const dispatch = useAppDispatch();
   const handleDeleteClick = async (id: number) => {
     try {
       await filmService.deleteFilm({ id: id.toString() });
@@ -48,33 +52,6 @@ const FilmCard = ({
         showErrorToast(error as string);
       }
       console.error(error);
-    }
-  };
-
-  const handleEditClick = () => {
-    setIsModalOpen(true);
-  };
-  const handleEditSubmit = async (
-    body: {
-      title: string;
-      director: string;
-      year: number;
-      genres: EGenre[];
-      description?: string | undefined;
-      image?: string | undefined;
-      rating: number;
-      status: EStatus;
-    },
-    id?: string | undefined,
-  ) => {
-    try {
-      if (id) {
-        await filmService.updateFilm({ body, id });
-      }
-      showSuccessToast('Данные фильма успешно изменены')
-      getFilms();
-    } catch (error: unknown) {
-      throw new Error ((error as Error).message)
     }
   };
   const [tooltipVisible, setTooltipVisible] = useState(false);
@@ -132,33 +109,24 @@ const FilmCard = ({
       </div>
       <div className={styles.line}></div>
       <div className={styles.buttons}>
-        <FilmButton
-          id={film.id}
-          type={EFilmButtonTypes.edit}
-          onClick={handleEditClick}
+        <EditFilmButton
+          onClick={() => {
+            dispatch(setData(film));
+            dispatch(setIsEditModalOpen(true));
+          }}
         />
-        <FilmButton
-          id={film.id}
-          type={EFilmButtonTypes.delete}
-          onClick={handleDeleteClick}
+        <DeleteFilmButton
+          onClick={() => {
+            handleDeleteClick(film.id);
+          }}
         />
-        <FilmButton
-          id={film.id}
-          type={EFilmButtonTypes.status}
+        <StatusFilmButton
           status={film.status}
-          onClick={handleStatusClick}
+          onClick={() => {
+            handleStatusClick(film.id, film.status);
+          }}
         />
       </div>
-      {isModalOpen ? (
-        <AddOrEditPopup
-          data={film}
-          onSubmit={handleEditSubmit}
-          onClose={() => {
-            setIsModalOpen(false);
-          }}
-          isModalOpen={isModalOpen}
-        />
-      ) : null}
     </div>
   );
 };
