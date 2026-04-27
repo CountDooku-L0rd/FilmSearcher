@@ -8,9 +8,14 @@ import { genreMapping } from "../../../constants/constants.ts";
 import { showErrorToast, showSuccessToast } from "../../../toasts/toasts.ts";
 import EditFilmButton from "./EditFilmButton/EditFilmButton.tsx";
 import { useAppDispatch } from "../../../hooks/storeHooks.ts";
-import { setData, setIsEditModalOpen } from "../../../store/modalSlice.ts";
+import {
+  setData,
+  setErrors,
+  setIsEditModalOpen,
+} from "../../../store/modalSlice.ts";
 import DeleteFilmButton from "./DeleteFilmButton/DeleteFilmButton.tsx";
 import StatusFilmButton from "./StatusFilmButton/StatusFilmButton.tsx";
+import { setIsServerRequest } from "../../../store/mainSlice.ts";
 
 const FilmCard = ({
   film,
@@ -21,9 +26,11 @@ const FilmCard = ({
   const dispatch = useAppDispatch();
   const handleDeleteClick = async (id: number) => {
     try {
+      dispatch(setIsServerRequest(true))
       await filmService.deleteFilm({ id: id.toString() });
       showSuccessToast("Фильм успешно удалён");
       getFilms();
+      dispatch(setIsServerRequest(false))
     } catch (error: unknown) {
       if (error instanceof Error) {
         showErrorToast(error.message);
@@ -36,6 +43,7 @@ const FilmCard = ({
 
   const handleStatusClick = async (id: number, status?: EStatus) => {
     try {
+      dispatch(setIsServerRequest(true))
       await filmService.changeFilmStatus({
         body: {
           status:
@@ -45,6 +53,7 @@ const FilmCard = ({
       });
       showSuccessToast("Статус фильма успешно изменён");
       getFilms();
+      dispatch(setIsServerRequest(false))
     } catch (error: unknown) {
       if (error instanceof Error) {
         showErrorToast(error.message);
@@ -112,6 +121,15 @@ const FilmCard = ({
         <EditFilmButton
           onClick={() => {
             dispatch(setData(film));
+            dispatch(
+              setErrors({
+                title: "",
+                director: "",
+                genres: "",
+                rating: "",
+                year: "",
+              }),
+            );
             dispatch(setIsEditModalOpen(true));
           }}
         />

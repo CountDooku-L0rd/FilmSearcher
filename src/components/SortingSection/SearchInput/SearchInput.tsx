@@ -1,4 +1,4 @@
-import { type ChangeEvent, useState } from "react";
+import { type ChangeEvent, useMemo, useState } from "react";
 import styles from "./SearchInput.module.css";
 import { useAppDispatch } from "../../../hooks/storeHooks.ts";
 import { setSearchString } from "../../../store/filterSlice.ts";
@@ -9,9 +9,9 @@ const SearchInput = () => {
   const [value, setValue] = useState("");
   const [isEmpty, setIsEmpty] = useState(true);
 
-  const debouncedSearch = debounce((searchValue: string) => {
+  const debouncedSearch = useMemo(() => debounce((searchValue: string) => {
     dispatch(setSearchString(searchValue));
-  }, 1000);
+  }, 1000), [dispatch]);
 
   const handleClick = () => {
     setIsEmpty(true);

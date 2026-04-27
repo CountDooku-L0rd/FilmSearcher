@@ -13,6 +13,7 @@ interface MainState {
   };
   pagination: GetFilmsSuccessResponseType["pagination"];
   serverError: boolean;
+  isServerRequest: boolean;
 }
 
 const initialState: MainState = {
@@ -29,6 +30,7 @@ const initialState: MainState = {
     total: 0,
   },
   serverError: false,
+  isServerRequest: false,
 };
 
 const mainSlice = createSlice({
@@ -59,6 +61,9 @@ const mainSlice = createSlice({
     setServerError: (state, action: PayloadAction<boolean>) => {
       state.serverError = action.payload;
     },
+    setIsServerRequest: (state, action: PayloadAction<boolean>) => {
+      state.isServerRequest = action.payload;
+    },
   },
 });
 
@@ -68,6 +73,7 @@ export const {
   setStatistic,
   setPagination,
   setServerError,
+  setIsServerRequest,
 } = mainSlice.actions;
 
 export default mainSlice.reducer;

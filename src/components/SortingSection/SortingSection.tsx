@@ -4,7 +4,7 @@ import SortButton from "./SortButton/SortButton.tsx";
 
 const SortingSection = () => {
   return (
-    <section>
+    <section className={styles.container}>
       <ul className={styles.list}>
         <li>
           <SearchInput />

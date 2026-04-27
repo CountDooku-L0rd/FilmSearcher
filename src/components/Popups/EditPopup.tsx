@@ -1,12 +1,7 @@
-import { useState, type SyntheticEvent } from "react";
+import { type SyntheticEvent } from "react";
 import { createPortal } from "react-dom";
 import CustomSelect from "../CustomSelect/CustomSelect";
-import {
-  addStatusOptions,
-  genreOptions,
-  statusMapping,
-} from "../../constants/constants";
-import CustomCheckbox from "../CustomCheckbox/CustomCheckbox";
+import { addStatusOptions, statusMapping } from "../../constants/constants";
 import { EGenre, EStatus } from "@yp-mentor/films-server-types";
 import { showErrorToast, showSuccessToast } from "../../toasts/toasts";
 import {
@@ -18,42 +13,37 @@ import {
 } from "./validation";
 import { useClickEscape } from "../../hooks/useClickEscape";
 import { useAppDispatch, useAppSelector } from "../../hooks/storeHooks";
-import { setData, setIsEditModalOpen } from "../../store/modalSlice";
+import {
+  setData,
+  setErrors,
+  setIsEditModalOpen,
+  setIsRequesting,
+} from "../../store/modalSlice";
 import { filmService } from "../../api/FilmsService";
 import { useGetFilms } from "../../hooks/useGetFilms";
 import PopupLabel from "./PopupLabel/PopupLabel";
 import PopupTextarea from "./PopupTextarea/PopupTextarea";
 import styles from "./Popup.module.css";
+import CheckboxList from "./CheckboxList/CheckboxList";
 
 const EditPopup = () => {
   const { getFilms } = useGetFilms();
   const dispatch = useAppDispatch();
-  const { data, isEditModalOpen } = useAppSelector((store) => store.modal);
+  const { data, isEditModalOpen, errors, isRequesting } = useAppSelector(
+    (store) => store.modal,
+  );
   const updateField = <T,>(key: string, value: T) => {
     dispatch(setData({ ...data, [key]: value }));
   };
-  const [errors, setErrors] = useState({
-    title: "",
-    year: "",
-    director: "",
-    genres: "",
-    rating: "",
-  });
-  const [isRequesting, setIsRequesting] = useState(false);
+  const updateError = (key: string, value: string) => {
+    dispatch(setErrors({ ...errors, [key]: value }));
+  };
   useClickEscape(isEditModalOpen);
-
-  const titleError = validateTitle(data.title);
-  const yearError = validateYear(data.year.toString());
-  const directorError = validateDirector(data.director);
-  const genresError = validateGenres(data.genres);
-  const ratingError = validateRating(data.rating.toString());
-  const isFormValid =
-    !titleError && !yearError && !directorError && !genresError && !ratingError;
 
   const handleSubmit = (e: SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
     e.preventDefault();
 
-    setIsRequesting(true);
+    dispatch(setIsRequesting(true));
     const body = {
       title: data.title,
       director: data.director,
@@ -83,11 +73,11 @@ const EditPopup = () => {
           console.error(error);
         })
         .finally(() => {
-          setIsRequesting(false);
+          dispatch(setIsRequesting(false));
         });
     } else {
-      showErrorToast("Ошибка, ID помер");
-      setIsRequesting(false);
+      showErrorToast("Ошибка, ID перестал существовать");
+      dispatch(setIsRequesting(false));
     }
   };
 
@@ -117,10 +107,7 @@ const EditPopup = () => {
           title="Название фильма *"
           onChange={(event) => {
             updateField("title", event.target.value);
-            setErrors((prev) => ({
-              ...prev,
-              title: validateTitle(event.target.value),
-            }));
+            updateError("title", validateTitle(event.target.value));
           }}
           error={errors.title}
         />
@@ -129,11 +116,15 @@ const EditPopup = () => {
             value={data.year === 0 ? "" : data.year.toString()}
             title="Год выпуска *"
             onChange={(event) => {
-              updateField("year", parseInt(event.target.value));
-              setErrors((prev) => ({
-                ...prev,
-                year: validateYear(event.target.value),
-              }));
+              if (event.target.value === "") {
+                updateField("year", 0);
+                return;
+              }
+              const numberValue = Number(event.target.value);
+              if (!isNaN(numberValue)) {
+                updateField("year", numberValue);
+              }
+              updateError("year", validateYear(event.target.value));
             }}
             style={{ width: "245px" }}
             error={errors.year}
@@ -143,49 +134,37 @@ const EditPopup = () => {
             title="Режиссёр *"
             onChange={(event) => {
               updateField("director", event.target.value);
-              setErrors((prev) => ({
-                ...prev,
-                director: validateDirector(event.target.value),
-              }));
+              updateError("director", validateDirector(event.target.value));
             }}
             style={{ width: "245px" }}
             error={errors.director}
           />
         </div>
-        <div className={styles.label}>
-          <p>Жанры *</p>
-          <ul className={styles.list}>
-            {genreOptions.map((item) =>
-              item.value !== EGenre.all ? (
-                <CustomCheckbox
-                  isChecked={data.genres.includes(item.value)}
-                  onChange={(value: EGenre, checked: boolean) => {
-                    const newGenres = checked
-                      ? [...data.genres, value]
-                      : data.genres.filter((g) => g !== value);
-                    updateField("genres", newGenres);
-                    setErrors((prev) => ({
-                      ...prev,
-                      genres: validateGenres(newGenres),
-                    }));
-                  }}
-                  value={item}
-                />
-              ) : null,
-            )}
-          </ul>
-          {errors.genres && <p className={styles.error}>{errors.genres}</p>}
-        </div>
+        <CheckboxList
+          onChange={(value: EGenre, checked: boolean) => {
+            const newGenres = checked
+              ? [...data.genres, value]
+              : data.genres.filter((g) => g !== value);
+            updateField("genres", newGenres);
+            updateError("genres", validateGenres(newGenres));
+          }}
+          title="Жанры *"
+          error={errors.genres}
+        />
         <div className={styles.label_group}>
           <PopupLabel
             value={data.rating === 0 ? "" : data.rating.toString()}
             title="Рейтинг (1-10) *"
             onChange={(event) => {
-              updateField("rating", parseFloat(event.target.value));
-              setErrors((prev) => ({
-                ...prev,
-                rating: validateRating(event.target.value),
-              }));
+              if (event.target.value === "") {
+                updateField("rating", 0);
+                return;
+              }
+              const numberValue = Number(event.target.value);
+              if (!isNaN(numberValue)) {
+                updateField("rating", numberValue);
+              }
+              updateError("rating", validateRating(event.target.value));
             }}
             style={{ width: "245px" }}
             error={errors.rating}
@@ -227,7 +206,7 @@ const EditPopup = () => {
           <button
             className={`${styles.button} ${styles.submit_button}`}
             type="submit"
-            disabled={isRequesting || !isFormValid}
+            disabled={isRequesting}
           >
             <p>Сохранить</p>
           </button>

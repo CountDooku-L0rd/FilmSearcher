@@ -1,6 +1,6 @@
 import { EStatus } from "@yp-mentor/films-server-types";
 import { useAppDispatch, useAppSelector } from "../../hooks/storeHooks";
-import { setData, setIsAddModalOpen } from "../../store/modalSlice";
+import { setData, setErrors, setIsAddModalOpen } from "../../store/modalSlice";
 import AddFilmButton from "../AddFilmButton/AddFilmButton";
 import SortingSection from "../SortingSection/SortingSection";
 import styles from "./ControleSection.module.css";
@@ -29,6 +29,15 @@ const ControlSection = () => {
                 title: "",
                 year: 0,
               }),
+              dispatch(
+                setErrors({
+                  title: "",
+                  director: "",
+                  genres: "",
+                  rating: "",
+                  year: "",
+                }),
+              ),
             );
           }}
         />

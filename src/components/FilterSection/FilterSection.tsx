@@ -45,7 +45,7 @@ const FilterSection = () => {
                   dispatch(setPage(1));
                 }}
                 title={"Сортировать по"}
-                style={{ width: "180px" }}
+                style={{ width: "200px" }}
               />
               <CustomSelector
                 options={sortingOrders}
