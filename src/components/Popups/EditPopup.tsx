@@ -1,6 +1,6 @@
-import { type SyntheticEvent } from "react";
+import { useState, type SyntheticEvent } from "react";
 import { createPortal } from "react-dom";
-import CustomSelect from "../CustomSelect/CustomSelect";
+import CustomSelect from "../shared/CustomSelect/CustomSelect";
 import { addStatusOptions, statusMapping } from "../../constants/constants";
 import { EGenre, EStatus } from "@yp-mentor/films-server-types";
 import { showErrorToast, showSuccessToast } from "../../toasts/toasts";
@@ -21,10 +21,11 @@ import {
 } from "../../store/modalSlice";
 import { filmService } from "../../api/FilmsService";
 import { useGetFilms } from "../../hooks/useGetFilms";
-import PopupLabel from "./PopupLabel/PopupLabel";
-import PopupTextarea from "./PopupTextarea/PopupTextarea";
+import CustomInput from "../shared/CustomInput/CustomInput";
+import CustomTextarea from "../shared/CustomTextarea/CustomTextarea";
 import styles from "./Popup.module.css";
-import CheckboxList from "./CheckboxList/CheckboxList";
+import CheckboxList from "../shared/CheckboxList/CheckboxList";
+import { setIsLoading } from "../../store/mainSlice";
 
 const EditPopup = () => {
   const { getFilms } = useGetFilms();
@@ -38,11 +39,15 @@ const EditPopup = () => {
   const updateError = (key: string, value: string) => {
     dispatch(setErrors({ ...errors, [key]: value }));
   };
+  const [ratingInput, setRatingInput] = useState(
+    data.rating !== 0 ? data.rating.toString() : "",
+  );
   useClickEscape(isEditModalOpen);
 
   const handleSubmit = (e: SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
     e.preventDefault();
 
+    dispatch(setIsLoading(true))
     dispatch(setIsRequesting(true));
     const body = {
       title: data.title,
@@ -86,7 +91,7 @@ const EditPopup = () => {
   return createPortal(
     <div
       className={styles.popup_container}
-      onClick={(event) => {
+      onMouseDown={(event) => {
         if (event.target === event.currentTarget) {
           dispatch(setIsEditModalOpen(false));
         }
@@ -102,7 +107,7 @@ const EditPopup = () => {
             dispatch(setIsEditModalOpen(false));
           }}
         />
-        <PopupLabel
+        <CustomInput
           value={data.title}
           title="Название фильма *"
           onChange={(event) => {
@@ -112,11 +117,11 @@ const EditPopup = () => {
           error={errors.title}
         />
         <div className={styles.label_group}>
-          <PopupLabel
+          <CustomInput
             value={data.year === 0 ? "" : data.year.toString()}
             title="Год выпуска *"
             onChange={(event) => {
-              if (event.target.value === "") {
+              if (!event.target.value) {
                 updateField("year", 0);
                 return;
               }
@@ -129,7 +134,7 @@ const EditPopup = () => {
             style={{ width: "245px" }}
             error={errors.year}
           />
-          <PopupLabel
+          <CustomInput
             value={data.director}
             title="Режиссёр *"
             onChange={(event) => {
@@ -152,19 +157,28 @@ const EditPopup = () => {
           error={errors.genres}
         />
         <div className={styles.label_group}>
-          <PopupLabel
-            value={data.rating === 0 ? "" : data.rating.toString()}
+          <CustomInput
+            value={ratingInput}
             title="Рейтинг (1-10) *"
             onChange={(event) => {
-              if (event.target.value === "") {
+              const value = event.target.value;
+              if (!value) {
+                setRatingInput("");
                 updateField("rating", 0);
+                updateError("rating", validateRating(""));
                 return;
               }
-              const numberValue = Number(event.target.value);
-              if (!isNaN(numberValue)) {
-                updateField("rating", numberValue);
+              const isValidFormat = /^\d*$|^\d+\.$|^\d+\.\d$/.test(value);
+              if (isValidFormat) {
+                setRatingInput(value);
+                if (value !== "." && !value.endsWith(".")) {
+                  const numberValue = parseFloat(value);
+                  if (!isNaN(numberValue)) {
+                    updateField("rating", numberValue);
+                  }
+                }
+                updateError("rating", validateRating(value));
               }
-              updateError("rating", validateRating(event.target.value));
             }}
             style={{ width: "245px" }}
             error={errors.rating}
@@ -179,7 +193,7 @@ const EditPopup = () => {
             }}
           />
         </div>
-        <PopupLabel
+        <CustomInput
           value={data.image ? data.image : ""}
           title="URL постера"
           onChange={(event) => {
@@ -187,7 +201,7 @@ const EditPopup = () => {
           }}
           placeholder="https://example.com/poster.jpg"
         />
-        <PopupTextarea
+        <CustomTextarea
           title="Описание"
           value={data.description ? data.description : ""}
           onChange={(event) => {

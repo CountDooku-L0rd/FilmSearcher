@@ -1,6 +1,6 @@
 import ControlSection from "../ControlSection/ControlSection";
 import FilmsSection from "../FilmsSection/FilmsSection";
-import FilterSection from "../FilterSection/FilterSection";
+import FilterSection from "../FilterAndSortSection/FilterAndSortSection";
 import ServerErrorSection from "../ServerErrorSection/ServerErrorSection";
 import styles from "./Main.module.css";
 import { useAppSelector } from "../../hooks/storeHooks";
@@ -15,7 +15,7 @@ const Main = () => {
       <FilterSection />
       <FilmsSection />
       {serverError && <ServerErrorSection />}
-      {pagination.total - pageSize >= 1 ? <Pagination/> : null}
+      {pagination.total - pageSize >= 1 && <Pagination />}
     </main>
   );
 };

@@ -1,0 +1,12 @@
+.container {
+  display: flex;
+}
+
+.skeleton {
+  width: 1220px;
+  height: 40px;
+  background: linear-gradient(#ededed, #eaeaea);
+  border-radius: 8px;
+  margin-top: 42px;
+  margin-bottom: 25px;
+}

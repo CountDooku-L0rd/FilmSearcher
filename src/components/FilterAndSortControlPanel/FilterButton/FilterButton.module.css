@@ -1,0 +1,27 @@
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 400;
+  cursor: pointer;
+  width: 162px;
+  height: 40px;
+  border: 1px solid var(--button-border-color);
+  background-color: var(--button-background-color);
+  border-radius: 8px;
+  margin-right: 33px;
+}
+
+.filter_svg {
+  width: 16px;
+  height: 16px;
+  background-image: url("../../../assets/filter.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.button:hover {
+  background-color: var(--hover-button-bg-color);
+}

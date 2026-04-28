@@ -61,6 +61,7 @@ const modalSlice = createSlice({
     setIsRequesting: (state, action: PayloadAction<boolean>) => {
       state.isRequesting = action.payload;
     },
+    resetModal: () => initialState,
   },
 });
 
@@ -70,6 +71,7 @@ export const {
   setIsAddModalOpen,
   setErrors,
   setIsRequesting,
+  resetModal,
 } = modalSlice.actions;
 
 export default modalSlice.reducer;

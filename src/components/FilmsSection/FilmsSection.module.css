@@ -1,17 +1,17 @@
-.list{
-    max-width: 1250px;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 40px;
-    list-style: none;
-    padding: 0;
-    margin-top: 7px;
+.list {
+  max-width: 1250px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 40px;
+  list-style: none;
+  padding: 0;
+  margin-top: 7px;
 }
 
-.skeleton{
-    width: 274px;
-    height: 520px;
-    background: linear-gradient(#EDEDED, #EAEAEA);
-    border-radius: 8px;
+.skeleton {
+  width: 274px;
+  height: 520px;
+  background: linear-gradient(#ededed, #eaeaea);
+  border-radius: 8px;
 }

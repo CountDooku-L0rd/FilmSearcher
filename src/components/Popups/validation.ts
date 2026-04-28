@@ -28,7 +28,11 @@ export const validateGenres = (value: EGenre[]) => {
 
 export const validateRating = (value: string) => {
   if (!value) return "Необходимо указать рейтинг";
+  const decimalPlaces = value.split(".")[1]?.length || 0;
+  if (decimalPlaces > 1)
+    return "Можно использовать только один знак после запятой";
   const ratingNum = parseFloat(value);
+  if (isNaN(ratingNum)) return "Введите корректное число";
   if (ratingNum < 1) return "Рейтинг должен быть от 1 до 10";
   if (ratingNum > 10) return "Рейтинг должен быть от 1 до 10";
   return "";

@@ -5,7 +5,8 @@ import {
   EStatus,
 } from "@yp-mentor/films-server-types";
 
-export const BASE_URL = "http://localhost:3000";
+export const IMAGE_NOT_EXIST =
+  "https://lava-nn.ru/upload/iblock/7ab/b7108adzxqzgcb3u7c473m61ypaye4or.jpg";
 
 export const genreOptions: { value: EGenre; label: string }[] = [
   { value: EGenre.all, label: "Все жанры" },

@@ -1,21 +1,21 @@
 .button {
-    background-color: var(--element-bg-color);
-    border: none;
-    cursor: pointer;
-    width: 16px;
-    height: 15px;
-    background-repeat: no-repeat;
-    background-size: contain;
+  background-color: var(--element-bg-color);
+  border: none;
+  cursor: pointer;
+  width: 16px;
+  height: 15px;
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 
-.watched{
-    background-image: url("../../../../assets/eye_on.svg");
+.watched {
+  background-image: url("../../../../assets/eye_on.svg");
 }
 
-.in_plans{
-    background-image: url("../../../../assets/eye_off.svg");
+.in_plans {
+  background-image: url("../../../../assets/eye_off.svg");
 }
 
-.button:hover{
-    background-color: var(--button-background-color);
+.button:hover {
+  background-color: var(--button-background-color);
 }

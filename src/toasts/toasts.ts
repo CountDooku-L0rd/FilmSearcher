@@ -19,6 +19,7 @@ export const showSuccessToast = (message: string) => {
       fontWeight: "600",
       lineHeight: "140%",
       border: "1px solid #757575",
+      zIndex: "9999",
     },
 
     iconTheme: {
@@ -46,6 +47,7 @@ export const showErrorToast = (message: string) => {
       fontWeight: "600",
       lineHeight: "140%",
       border: "1px solid #EC221F",
+      zIndex: "9999",
     },
 
     iconTheme: {

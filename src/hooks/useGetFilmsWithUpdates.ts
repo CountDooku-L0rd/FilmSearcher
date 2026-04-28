@@ -33,4 +33,4 @@ const useGetFilmsWithUpdates = () => {
   ]);
 };
 
-export default useGetFilmsWithUpdates
+export default useGetFilmsWithUpdates;

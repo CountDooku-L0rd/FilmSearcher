@@ -1,7 +1,5 @@
-import styles from './icons.module.css'
+import styles from "./icons.module.css";
 
-export const ErrorToastIcon = () =>{
-    return (
-        <div className={styles.error}></div>
-    )
-}
+export const ErrorToastIcon = () => {
+  return <div className={styles.error}></div>;
+};

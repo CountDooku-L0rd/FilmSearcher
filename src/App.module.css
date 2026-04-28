@@ -1,0 +1,25 @@
+.movie_app {
+  font-family: "Inter", sans-serif;
+  --header-text-color: #1e1e1e;
+  --body-bg-color: #f5f5f5;
+  --element-bg-color: #ffffff;
+  --gray-text-color: #757575;
+  --border-color: #d9d9d9;
+  --placeholder-text-color: #b3b3b3;
+  --button-border-color: #767676;
+  --button-background-color: #e3e3e3;
+  --add-button-bg-color: #2c2c2c;
+  --hover-add-button-bg-color: #1e1e1e;
+  --hover-button-bg-color: #cdcdcd;
+  --title-text-color: #000000;
+  --description-text-color: #555555;
+  --watched-bg-color: #ebffee;
+  --in-plans-bg-color: #fef9e7;
+  --error-text-color: #b3261e;
+  background-color: var(--body-bg-color);
+  min-height: 100vh;
+}
+
+.movie_app p {
+  margin: 0;
+}

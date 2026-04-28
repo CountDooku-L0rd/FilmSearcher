@@ -40,7 +40,7 @@ const filterSlice = createSlice({
       state,
       action: PayloadAction<{ value: EGenre; label: string }>,
     ) => {
-      state.genreValue = action.payload
+      state.genreValue = action.payload;
     },
     setRatingValue: (
       state,
@@ -52,7 +52,7 @@ const filterSlice = createSlice({
       state,
       action: PayloadAction<{ value: EStatus; label: string }>,
     ) => {
-      state.statusValue = action.payload
+      state.statusValue = action.payload;
     },
     setStartYear: (state, action: PayloadAction<number | null>) => {
       state.startYear = action.payload;
@@ -64,13 +64,13 @@ const filterSlice = createSlice({
       state,
       action: PayloadAction<{ value: ESortField; label: string }>,
     ) => {
-      state.sortBy = action.payload
+      state.sortBy = action.payload;
     },
     setSortingOrder: (
       state,
       action: PayloadAction<{ value: ESortOrder; label: string }>,
     ) => {
-      state.sortingOrder = action.payload
+      state.sortingOrder = action.payload;
     },
     setSearchString: (state, action: PayloadAction<string>) => {
       state.searchString = action.payload;
@@ -80,6 +80,13 @@ const filterSlice = createSlice({
     },
     setPageSize: (state, action: PayloadAction<number>) => {
       state.pageSize = action.payload;
+    },
+    resetFilters: (state) => {
+      state.genreValue = { value: EGenre.all, label: "Все жанры" };
+      state.statusValue = { value: EStatus.all, label: "Все статусы" };
+      state.ratingValue = { value: 0, label: "Любой рейтинг" };
+      state.startYear = null;
+      state.endYear = null;
     },
   },
 });
@@ -95,6 +102,7 @@ export const {
   setSearchString,
   setPage,
   setPageSize,
+  resetFilters,
 } = filterSlice.actions;
 
 export default filterSlice.reducer;

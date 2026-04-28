@@ -1,8 +1,8 @@
-.header{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 31px;
-    height: 100px;
-    background-color: var(--element-bg-color);
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 31px;
+  height: 100px;
+  background-color: var(--element-bg-color);
 }

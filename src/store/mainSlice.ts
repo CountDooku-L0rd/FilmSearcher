@@ -14,6 +14,7 @@ interface MainState {
   pagination: GetFilmsSuccessResponseType["pagination"];
   serverError: boolean;
   isServerRequest: boolean;
+  isUpdating: boolean;
 }
 
 const initialState: MainState = {
@@ -31,6 +32,7 @@ const initialState: MainState = {
   },
   serverError: false,
   isServerRequest: false,
+  isUpdating: false,
 };
 
 const mainSlice = createSlice({
@@ -64,6 +66,9 @@ const mainSlice = createSlice({
     setIsServerRequest: (state, action: PayloadAction<boolean>) => {
       state.isServerRequest = action.payload;
     },
+    setIsUpdating: (state, action: PayloadAction<boolean>) => {
+      state.isUpdating = action.payload;
+    },
   },
 });
 
@@ -74,6 +79,7 @@ export const {
   setPagination,
   setServerError,
   setIsServerRequest,
+  setIsUpdating,
 } = mainSlice.actions;
 
 export default mainSlice.reducer;
