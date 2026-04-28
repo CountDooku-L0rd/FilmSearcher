@@ -11,7 +11,7 @@ const ClearFilterButton = () => {
         dispatch(resetFilters());
       }}
     >
-      {"Сбросить фильтры"}
+      Сбросить фильтры
     </button>
   );
 };

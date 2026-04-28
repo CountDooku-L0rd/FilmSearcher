@@ -13,7 +13,7 @@ const SearchBar = () => {
     () =>
       debounce((searchValue: string) => {
         dispatch(setSearchString(searchValue));
-      }, 1000),
+      }, 600),
     [dispatch],
   );
 
@@ -24,11 +24,7 @@ const SearchBar = () => {
   };
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
-    if (newValue !== "") {
-      setIsEmpty(false);
-    } else {
-      setIsEmpty(true);
-    }
+    setIsEmpty(!newValue)
     setValue(newValue);
     debouncedSearch(newValue);
   };

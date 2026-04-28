@@ -5,17 +5,15 @@ import { toggleFilterOpen } from "../../../store/sortSlice.ts";
 const FilterButton = () => {
   const dispatch = useAppDispatch();
   return (
-    <>
-      <button
-        className={styles.button}
-        onClick={() => {
-          dispatch(toggleFilterOpen());
-        }}
-      >
-        <span className={styles.filter_svg}></span>
-        <span>{"Фильтры"}</span>
-      </button>
-    </>
+    <button
+      className={styles.button}
+      onClick={() => {
+        dispatch(toggleFilterOpen());
+      }}
+    >
+      <span className={styles.filter_svg}></span>
+      Фильтры
+    </button>
   );
 };
 

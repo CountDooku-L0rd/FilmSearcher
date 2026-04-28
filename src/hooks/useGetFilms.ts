@@ -6,6 +6,7 @@ import {
   setIsLoading,
   setPagination,
   setServerError,
+  setIsUpdating,
 } from "../store/mainSlice.ts";
 import type { FilmsAPI } from "@yp-mentor/films-server-types";
 
@@ -66,6 +67,7 @@ export function useGetFilms() {
       })
       .finally(() => {
         dispatch(setIsLoading(false));
+        dispatch(setIsUpdating(false))
       });
   };
   return { getFilms };

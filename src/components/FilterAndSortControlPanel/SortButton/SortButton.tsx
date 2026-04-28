@@ -5,17 +5,15 @@ import { toggleSortOpen } from "../../../store/sortSlice.ts";
 const SortButton = () => {
   const dispatch = useAppDispatch();
   return (
-    <>
-      <button
-        className={styles.button}
-        onClick={() => {
-          dispatch(toggleSortOpen());
-        }}
-      >
-        <span className={styles.sort_button}></span>
-        <span>{"Сортировка"}</span>
-      </button>
-    </>
+    <button
+      className={styles.button}
+      onClick={() => {
+        dispatch(toggleSortOpen());
+      }}
+    >
+      <span className={styles.sort_button}></span>
+      Сортировка
+    </button>
   );
 };
 
