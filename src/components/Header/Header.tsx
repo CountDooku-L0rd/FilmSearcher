@@ -1,6 +1,5 @@
 import styles from "./Header.module.css";
 import HeaderLogo from "./HeaderLogo/HeaderLogo";
-import Profile from "./Profile/Profile";
 import StatisticSection from "./StatisticSection/StatisticSection";
 
 const Header = () => {
@@ -8,7 +7,6 @@ const Header = () => {
     <header className={styles.header}>
       <HeaderLogo />
       <StatisticSection />
-      <Profile/>
     </header>
   );
 };
