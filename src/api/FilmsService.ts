@@ -22,6 +22,7 @@ class FilmsService implements FilmsAPI {
         body: JSON.stringify(body),
         headers: {
           "Content-type": "application/json",
+          'Authorization':`Bearer ${localStorage.getItem('accessToken')}`,
         },
       });
       return this.checkResponseStatus(response);
