@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router";
 import { useAppDispatch, useAppSelector } from "../../../hooks/storeHooks";
-import { clearCredentials } from "../../../store/AuthSlice";
+import { clearCredentials } from "../../../store/authSlice";
 import styles from "./Profile.module.css";
 
 const Profile = () => {

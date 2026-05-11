@@ -1,4 +1,3 @@
-import { filmService } from "../api/FilmsService.ts";
 import { useAppDispatch, useAppSelector } from "./storeHooks.ts";
 import {
   setFilms,
@@ -9,6 +8,7 @@ import {
   setIsUpdating,
 } from "../store/mainSlice.ts";
 import type { FilmsAPI } from "@yp-mentor/films-server-types";
+import { useGetFilmsMutation } from "../store/api/filmsApi/filmsApi.ts";
 
 type GetFilmsRequestType = Parameters<FilmsAPI["getFilms"]>[0];
 export function useGetFilms() {
@@ -25,8 +25,12 @@ export function useGetFilms() {
     page,
     pageSize,
   } = useAppSelector((store) => store.filter);
+
+  const [getFilmsTrigger] = useGetFilmsMutation();
+
   const getFilms = () => {
     dispatch(setIsLoading(true));
+
     const body: GetFilmsRequestType["body"] = {
       filters: {
         genre: genreValue.value,
@@ -54,8 +58,9 @@ export function useGetFilms() {
         pageSize: pageSize,
       },
     };
-    filmService
-      .getFilms({ body })
+
+    getFilmsTrigger(body)
+      .unwrap()
       .then((result) => {
         dispatch(setFilms(result.data));
         dispatch(setStatistic(result.statistic));
@@ -67,8 +72,10 @@ export function useGetFilms() {
       })
       .finally(() => {
         dispatch(setIsLoading(false));
-        dispatch(setIsUpdating(false))
+        dispatch(setIsUpdating(false));
       });
-  };
+  }
+
+
   return { getFilms };
 }

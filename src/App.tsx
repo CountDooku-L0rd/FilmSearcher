@@ -1,12 +1,13 @@
 import "primereact/resources/themes/mira/theme.css";
 import { Navigate, Route, Routes, useNavigate } from "react-router";
 import Auth from "./pages/Auth/Auth";
-import Register from "./pages/Register/Register";
+import Register from "./pages/Registration/Registration";
 import MainPage from "./pages/MainPage/MainPage";
-import { useGetMeQuery } from "./store/api/authApi";
+import { useGetMeQuery } from "./store/api/authApi/authApi";
 import { useAppDispatch } from "./hooks/storeHooks";
-import { setCredentials } from "./store/AuthSlice";
+import { setCredentials } from "./store/authSlice";
 import { useEffect } from "react";
+import CustomToaster from "./components/shared/CustomToaster/CustomToaster";
 
 function App() {
   const token = localStorage.getItem("accessToken");
@@ -16,16 +17,19 @@ function App() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   useEffect(() => {
-    navigate('/', { replace: true });
-  },[user, token])
+    navigate("/", { replace: true });
+  }, [user, token]);
 
   if (!token) {
     return (
-      <Routes>
-        <Route path="/login" element={<Auth />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="*" element={<Navigate to="/login" replace />} />
-      </Routes>
+      <>
+        <CustomToaster />
+        <Routes>
+          <Route path="/login" element={<Auth />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="*" element={<Navigate to="/login" replace />} />
+        </Routes>
+      </>
     );
   }
 
@@ -46,19 +50,25 @@ function App() {
 
   if (!user) {
     return (
-      <Routes>
-        <Route path="/login" element={<Auth />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="*" element={<Navigate to="/login" replace />} />
-      </Routes>
+      <>
+        <CustomToaster />
+        <Routes>
+          <Route path="/login" element={<Auth />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="*" element={<Navigate to="/login" replace />} />
+        </Routes>
+      </>
     );
   } else {
-    dispatch(setCredentials({ user }))
+    dispatch(setCredentials({ user }));
     return (
-      <Routes>
-        <Route path="/" element={<MainPage />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+      <>
+        <CustomToaster />
+        <Routes>
+          <Route path="/" element={<MainPage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </>
     );
   }
 }

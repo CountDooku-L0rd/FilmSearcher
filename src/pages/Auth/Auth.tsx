@@ -1,49 +1,35 @@
-import { useState } from "react";
 import CustomInput from "../../components/shared/CustomInput/CustomInput";
 import styles from "./Auth.module.css";
 import { Link, useNavigate } from "react-router";
-import { useLoginMutation } from "../../store/api/authApi";
+import { useLoginMutation } from "../../store/api/authApi/authApi";
 import { useAppDispatch } from "../../hooks/storeHooks";
-import { setCredentials } from "../../store/AuthSlice";
+import { setCredentials } from "../../store/authSlice";
 
 const Auth = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const [login, { isLoading }] = useLoginMutation();
   const dispatch = useAppDispatch();
+  const handleSubmit = (formData: FormData) => {
+    login({
+      username: formData.get("username")!.toString(),
+      password: formData.get("password")!.toString(),
+    })
+      .unwrap()
+      .then((response) => {
+        console.log(response)
+        dispatch(setCredentials({ user: response.user }));
+        localStorage.setItem("accessToken", response.accessToken);
+        navigate("/", { replace: true });
+      });
+  };
   return (
     <div className={styles.auth}>
-      <form
-        className={styles.container}
-        onSubmit={async (event) => {
-          event.preventDefault();
-          const result = await login({ username, password }).unwrap();
-
-          if (result.success && result.accessToken && result.user) {
-            dispatch(
-              setCredentials({ user: result.user}),
-            );
-            localStorage.setItem('accessToken', result.accessToken)
-            navigate("/", {replace: true});
-          }
-        }}
-      >
-        <CustomInput
-          title="Логин"
-          value={username}
-          onChange={(event) => {
-            setUsername(event.target.value);
-          }}
-          style={{ width: "270px" }}
-        />
+      <form className={styles.container} action={handleSubmit}>
+        <CustomInput title="Логин" style={{ width: "270px" }} name="username" />
         <CustomInput
           title="Пароль"
-          value={password}
-          onChange={(event) => {
-            setPassword(event.target.value);
-          }}
           style={{ width: "270px" }}
+          name="password"
         />
         <button className={styles.button} type="submit" disabled={isLoading}>
           Войти
