@@ -6,7 +6,7 @@ export const checkErrorMiddleware: Middleware = () => (next) => (action) => {
   if (isRejectedWithValue(action)) {
     showErrorToast(
       (action.payload as IErrorPayload)?.data?.errorMessage ??
-        "ç•®ß¢•·‚≠†Ô ÆË®°™†",
+        "–ù–µ–∏–∑–≤–∞–µ—Å—Ç–Ω–∞—è –æ—à–∏–±–∫–∞",
     );
   }
   return next(action);

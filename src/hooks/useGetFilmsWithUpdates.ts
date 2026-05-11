@@ -29,6 +29,7 @@ const useGetFilmsWithUpdates = () => {
     sortBy,
     sortingOrder,
     startYear,
+    getFilms,
   ]);
 };
 
