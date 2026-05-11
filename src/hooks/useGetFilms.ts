@@ -7,59 +7,16 @@ import {
   setServerError,
   setIsUpdating,
 } from "../store/mainSlice.ts";
-import type { FilmsAPI } from "@yp-mentor/films-server-types";
 import { useGetFilmsMutation } from "../store/api/filmsApi/filmsApi.ts";
+import { createBodyForGetFilmsRequest } from "../utils/utils.ts";
 
-type GetFilmsRequestType = Parameters<FilmsAPI["getFilms"]>[0];
 export function useGetFilms() {
   const dispatch = useAppDispatch();
-  const {
-    sortBy,
-    sortingOrder,
-    genreValue,
-    statusValue,
-    ratingValue,
-    endYear,
-    startYear,
-    searchString,
-    page,
-    pageSize,
-  } = useAppSelector((store) => store.filter);
-
   const [getFilmsTrigger] = useGetFilmsMutation();
-
+  const filters = useAppSelector(state => state.filter)
   const getFilms = () => {
     dispatch(setIsLoading(true));
-
-    const body: GetFilmsRequestType["body"] = {
-      filters: {
-        genre: genreValue.value,
-        minRating: ratingValue.value === 0 ? undefined : ratingValue.value,
-        status: statusValue.value,
-        yearRange: startYear
-          ? {
-              from: startYear,
-              to: endYear ? endYear : undefined,
-            }
-          : endYear
-            ? {
-                from: startYear ? startYear : undefined,
-                to: endYear,
-              }
-            : undefined,
-      },
-      sort: {
-        field: sortBy.value,
-        order: sortingOrder.value,
-      },
-      searchString: searchString ? searchString : undefined,
-      pagination: {
-        page: page,
-        pageSize: pageSize,
-      },
-    };
-
-    getFilmsTrigger(body)
+    getFilmsTrigger((createBodyForGetFilmsRequest(filters)))
       .unwrap()
       .then((result) => {
         dispatch(setFilms(result.data));

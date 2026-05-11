@@ -6,7 +6,7 @@ import {
   EStatus,
 } from "@yp-mentor/films-server-types";
 
-interface FilterState {
+export interface FilterState {
   genreValue: { value: EGenre; label: string };
   ratingValue: { value: number; label: string };
   statusValue: { value: EStatus; label: string };
