@@ -1,31 +1,52 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { authApi } from "./api/authApi/authApi";
 
 interface User {
   id: number;
   username: string;
   email: string;
-  role: 'user' | 'admin';
+  role: "user" | "admin";
 }
 
 interface AuthState {
+  isAuthenticated: boolean;
   user: User | null;
 }
 
 const initialState: AuthState = {
+  isAuthenticated: false,
   user: null,
 };
 
 const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
-    setCredentials: (state, action: PayloadAction<{ user: User}>) => {
+    setAuthenticated: (state, action: PayloadAction<boolean>) => {
+      state.isAuthenticated = action.payload;
+    },
+    setCredentials: (state, action: PayloadAction<{ user: User }>) => {
       state.user = action.payload.user;
     },
     clearCredentials: (state) => {
       state.user = null;
-      localStorage.removeItem('accessToken');
+      localStorage.removeItem("accessToken");
     },
+  },
+  extraReducers: (builder) => {
+    builder.addMatcher(
+      authApi.endpoints.login.matchFulfilled,
+      (state, { payload }) => {
+        state.isAuthenticated = !!payload.user;
+      },
+    );
+    builder.addMatcher(
+      authApi.endpoints.getMe.matchFulfilled,
+      (state, { payload }) => {
+        state.user = payload;
+        state.isAuthenticated = !!payload;
+      },
+    );
   },
 });
 

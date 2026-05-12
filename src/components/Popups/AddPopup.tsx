@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import CustomSelect from "../shared/CustomSelect/CustomSelect";
 import { addStatusOptions, statusMapping } from "../../constants/constants";
 import { EGenre, EStatus } from "@yp-mentor/films-server-types";
-import { showErrorToast, showSuccessToast } from "../../toasts/toasts";
+import { showSuccessToast } from "../../toasts/toasts";
 import {
   validateDirector,
   validateGenres,
@@ -19,13 +19,13 @@ import {
   setIsAddModalOpen,
   setIsRequesting,
 } from "../../store/modalSlice";
-import { filmService } from "../../api/FilmsService";
 import { useGetFilms } from "../../hooks/useGetFilms";
 import styles from "./Popup.module.css";
 import CustomInput from "../shared/CustomInput/CustomInput";
 import CustomTextarea from "../shared/CustomTextarea/CustomTextarea";
 import CheckboxList from "../shared/CheckboxList/CheckboxList";
-import { setIsLoading, setIsUpdating } from "../../store/mainSlice";
+import { setIsUpdating } from "../../store/mainSlice";
+import { useCreateFilmMutation } from "../../store/api/filmsApi/filmsApi";
 
 const AddPopup = () => {
   const { getFilms } = useGetFilms();
@@ -42,13 +42,12 @@ const AddPopup = () => {
   const [ratingInput, setRatingInput] = useState(
     data.rating !== 0 ? data.rating.toString() : "",
   );
+  const [createFilmMutation] = useCreateFilmMutation();
   useClickEscape(isAddModalOpen);
 
   const handleSubmit = (e: SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
     e.preventDefault();
-
-    dispatch(setIsLoading(true))
-    dispatch(setIsUpdating(true))
+    dispatch(setIsUpdating(true));
     dispatch(setIsRequesting(true));
     const body = {
       title: data.title,
@@ -60,24 +59,15 @@ const AddPopup = () => {
       rating: data.rating,
       status: data.status,
     };
-    filmService
-      .createFilm({ body })
+    createFilmMutation({ body })
       .then(() => {
         showSuccessToast("Фильм успешно добавлен");
         getFilms();
         dispatch(setIsAddModalOpen(false));
       })
-      .catch((error: unknown) => {
-        if (error instanceof Error) {
-          showErrorToast(error.message);
-        } else {
-          showErrorToast(error as string);
-        }
-        console.error(error);
-      })
       .finally(() => {
         dispatch(setIsRequesting(false));
-        dispatch(setIsUpdating(false))
+        dispatch(setIsUpdating(false));
       });
   };
 

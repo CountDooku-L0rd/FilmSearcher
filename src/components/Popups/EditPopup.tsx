@@ -19,13 +19,12 @@ import {
   setIsEditModalOpen,
   setIsRequesting,
 } from "../../store/modalSlice";
-import { filmService } from "../../api/FilmsService";
 import { useGetFilms } from "../../hooks/useGetFilms";
 import CustomInput from "../shared/CustomInput/CustomInput";
 import CustomTextarea from "../shared/CustomTextarea/CustomTextarea";
 import styles from "./Popup.module.css";
 import CheckboxList from "../shared/CheckboxList/CheckboxList";
-import { setIsLoading } from "../../store/mainSlice";
+import { useUpdateFilmMutation } from "../../store/api/filmsApi/filmsApi";
 
 const EditPopup = () => {
   const { getFilms } = useGetFilms();
@@ -42,12 +41,12 @@ const EditPopup = () => {
   const [ratingInput, setRatingInput] = useState(
     data.rating !== 0 ? data.rating.toString() : "",
   );
+  const [updateFilmTrigger] = useUpdateFilmMutation();
   useClickEscape(isEditModalOpen);
 
   const handleSubmit = (e: SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
     e.preventDefault();
 
-    dispatch(setIsLoading(true))
     dispatch(setIsRequesting(true));
     const body = {
       title: data.title,
@@ -62,8 +61,7 @@ const EditPopup = () => {
     const id = data.id.toString();
 
     if (id) {
-      filmService
-        .updateFilm({ body, id })
+      updateFilmTrigger({ body, id })
         .then(() => {
           showSuccessToast("Данные фильма успешно изменены");
           getFilms();

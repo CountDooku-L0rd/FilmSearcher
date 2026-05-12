@@ -1,10 +1,7 @@
-import { useAppDispatch } from "../../hooks/storeHooks";
 import { useGetFilms } from "../../hooks/useGetFilms";
-import { setServerError } from "../../store/mainSlice";
 import styles from "./ServerErrorSection.module.css";
 
 const ServerErrorSection = () => {
-  const dispatch = useAppDispatch();
   const { getFilms } = useGetFilms();
   return (
     <div className={styles.container}>
@@ -16,7 +13,6 @@ const ServerErrorSection = () => {
       <button
         className={styles.button}
         onClick={() => {
-          dispatch(setServerError(false));
           getFilms();
         }}
       >

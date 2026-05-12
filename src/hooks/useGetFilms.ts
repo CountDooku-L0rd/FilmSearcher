@@ -1,38 +1,16 @@
-import { useAppDispatch, useAppSelector } from "./storeHooks.ts";
-import {
-  setFilms,
-  setStatistic,
-  setIsLoading,
-  setPagination,
-  setServerError,
-  setIsUpdating,
-} from "../store/mainSlice.ts";
+import { useAppSelector } from "./storeHooks.ts";
 import { useGetFilmsMutation } from "../store/api/filmsApi/filmsApi.ts";
 import { createBodyForGetFilmsRequest } from "../utils/utils.ts";
+import { useCallback } from "react";
 
 export function useGetFilms() {
-  const dispatch = useAppDispatch();
-  const [getFilmsTrigger] = useGetFilmsMutation();
-  const filters = useAppSelector(state => state.filter)
-  const getFilms = () => {
-    dispatch(setIsLoading(true));
-    getFilmsTrigger((createBodyForGetFilmsRequest(filters)))
-      .unwrap()
-      .then((result) => {
-        dispatch(setFilms(result.data));
-        dispatch(setStatistic(result.statistic));
-        dispatch(setPagination(result.pagination));
-      })
-      .catch((err: Error) => {
-        dispatch(setServerError(true));
-        console.error(err.message);
-      })
-      .finally(() => {
-        dispatch(setIsLoading(false));
-        dispatch(setIsUpdating(false));
-      });
-  }
-
+  const [getFilmsTrigger] = useGetFilmsMutation({
+    fixedCacheKey: "shared-get-films",
+  });
+  const filters = useAppSelector((state) => state.filter);
+  const getFilms = useCallback(() => {
+    getFilmsTrigger(createBodyForGetFilmsRequest(filters));
+  }, [filters, getFilmsTrigger]);
 
   return { getFilms };
 }

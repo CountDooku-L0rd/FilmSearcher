@@ -2,11 +2,16 @@ import { useNavigate } from "react-router";
 import { useAppDispatch, useAppSelector } from "../../../hooks/storeHooks";
 import { clearCredentials } from "../../../store/authSlice";
 import styles from "./Profile.module.css";
+import { useGetFilmsMutation } from "../../../store/api/filmsApi/filmsApi";
 
 const Profile = () => {
   const { user } = useAppSelector((store) => store.auth);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [, { isError }] = useGetFilmsMutation({
+    fixedCacheKey: "shared-get-films",
+  });
+  if (isError) return null;
   return (
     <div className={styles.container}>
       <div className={styles.elem}>

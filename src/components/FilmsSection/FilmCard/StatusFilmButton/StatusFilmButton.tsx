@@ -1,14 +1,10 @@
 import { EStatus } from "@yp-mentor/films-server-types";
 import styles from "./StatusFilmButton.module.css";
 import { useAppDispatch, useAppSelector } from "../../../../hooks/storeHooks";
-import {
-  setIsLoading,
-  setIsServerRequest,
-  setIsUpdating,
-} from "../../../../store/mainSlice";
-import { filmService } from "../../../../api/FilmsService";
-import { showErrorToast, showSuccessToast } from "../../../../toasts/toasts";
+import { setIsServerRequest, setIsUpdating } from "../../../../store/mainSlice";
+import { showSuccessToast } from "../../../../toasts/toasts";
 import { useGetFilms } from "../../../../hooks/useGetFilms";
+import { useChangeFilmStatusMutation } from "../../../../store/api/filmsApi/filmsApi";
 
 const StatusFilmButton = ({
   filmId,
@@ -20,29 +16,24 @@ const StatusFilmButton = ({
   const { isServerRequest } = useAppSelector((store) => store.main);
   const dispatch = useAppDispatch();
   const { getFilms } = useGetFilms();
+  const [changeFilmStatusTrigger] = useChangeFilmStatusMutation();
   const handleStatusClick = async (id: number, status?: EStatus) => {
-    try {
-      dispatch(setIsLoading(true));
-      dispatch(setIsUpdating(true));
-      dispatch(setIsServerRequest(true));
-      await filmService.changeFilmStatus({
-        body: {
-          status:
-            status === EStatus.in_plans ? EStatus.watched : EStatus.in_plans,
-        },
-        id: id.toString(),
+    dispatch(setIsUpdating(true));
+    dispatch(setIsServerRequest(true));
+    changeFilmStatusTrigger({
+      body: {
+        status:
+          status === EStatus.in_plans ? EStatus.watched : EStatus.in_plans,
+      },
+      id: id.toString(),
+    })
+      .then(() => {
+        showSuccessToast("Статус фильма успешно изменён");
+        getFilms();
+      })
+      .finally(() => {
+        dispatch(setIsServerRequest(false));
       });
-      showSuccessToast("Статус фильма успешно изменён");
-      getFilms();
-      dispatch(setIsServerRequest(false));
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        showErrorToast(error.message);
-      } else {
-        showErrorToast(error as string);
-      }
-      console.error(error);
-    }
   };
   return (
     <button

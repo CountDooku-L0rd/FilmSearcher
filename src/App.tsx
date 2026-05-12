@@ -7,13 +7,14 @@ import { useGetMeQuery } from "./store/api/authApi/authApi";
 import CustomToaster from "./components/shared/CustomToaster/CustomToaster";
 import RoutingLoad from "./components/RoutingLoad/RoutingLoad";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import { useAppSelector } from "./hooks/storeHooks";
 
 function App() {
   const token = localStorage.getItem("accessToken");
-  const { data: user, isLoading } = useGetMeQuery(undefined, {
+  const { isLoading } = useGetMeQuery(undefined, {
     skip: !token,
   });
-
+  const isAuthenticated = useAppSelector((slice) => slice.auth.isAuthenticated);
   if (isLoading) {
     return <RoutingLoad />;
   }
@@ -25,14 +26,23 @@ function App() {
         <Route
           path="/MainPage"
           element={
-            <ProtectedRoute isAuthenticated={!!user}>
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
               <MainPage />
             </ProtectedRoute>
           }
         />
         <Route path="/login" element={<Auth />} />
         <Route path="/register" element={<Register />} />
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        <Route
+          path="*"
+          element={
+            isAuthenticated ? (
+              <Navigate to="/MainPage" replace />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
       </Routes>
     </>
   );

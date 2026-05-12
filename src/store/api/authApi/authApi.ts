@@ -1,6 +1,16 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import type { LoginRequest, LoginResponse, RegisterRequest, RegisterResponse, User } from "./authApiTypes";
-import { baseQueryWithReauth, unwrapData } from "../baseQuery";
+import type {
+  LoginRequest,
+  LoginResponse,
+  RegisterRequest,
+  RegisterResponse,
+  User,
+} from "./authApiTypes";
+import { baseQueryWithReauth } from "../baseQuery";
+import type { ServerResponse } from "../baseQueryTypes";
+
+const unwrapData = <T>(serverResponse: ServerResponse<T>) =>
+  serverResponse.data;
 
 export const authApi = createApi({
   reducerPath: "authApi",
@@ -13,7 +23,6 @@ export const authApi = createApi({
         method: "POST",
         body: credentials,
       }),
-      //transformResponse: unwrapData,
     }),
     register: builder.mutation<RegisterResponse, RegisterRequest>({
       query: (userData) => ({

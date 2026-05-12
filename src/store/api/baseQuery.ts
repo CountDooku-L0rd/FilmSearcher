@@ -1,5 +1,4 @@
 import { fetchBaseQuery, type BaseQueryFn } from "@reduxjs/toolkit/query";
-import type { ServerResponse } from "./baseQueryTypes";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: import.meta.env.VITE_API_URL,
@@ -36,6 +35,3 @@ export const baseQueryWithReauth: BaseQueryFn = async (args, api, extraOptions) 
   }
   return result;
 };
-
-export const unwrapData = <T>(serverResponse: ServerResponse<T>) =>
-  serverResponse.data;

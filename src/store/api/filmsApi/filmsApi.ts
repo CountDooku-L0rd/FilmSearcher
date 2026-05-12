@@ -22,19 +22,17 @@ export const filmsApi = createApi({
       query: (request) => ({
         url: "/getFilms",
         method: "POST",
-        body: request,
+        body: request.body,
       }),
-      //transformResponse: unwrapData,
     }),
     createFilm: builder.mutation<CreateFilmResponseType, CreateFilmRequestType>(
       {
         query: (request) => ({
           url: "/createFilm",
           method: "POST",
-          body: request,
+          body: request.body,
         }),
         invalidatesTags: ["Film"],
-       // transformResponse: unwrapData,
       },
     ),
     deleteFilm: builder.mutation<DeleteFilmResponseType, DeleteFilmRequestType>(
@@ -44,7 +42,6 @@ export const filmsApi = createApi({
           method: "DELETE",
         }),
         invalidatesTags: ["Film"],
-        //transformResponse: unwrapData,
       },
     ),
     updateFilm: builder.mutation<UpdateFilmResponseType, UpdateFilmRequestType>(
@@ -55,7 +52,6 @@ export const filmsApi = createApi({
           body: request.body,
         }),
         invalidatesTags: ["Film"],
-        //transformResponse: unwrapData,
       },
     ),
     changeFilmStatus: builder.mutation<
@@ -68,7 +64,6 @@ export const filmsApi = createApi({
         body: request.body,
       }),
       invalidatesTags: ["Film"],
-      //transformResponse: unwrapData,
     }),
   }),
 });

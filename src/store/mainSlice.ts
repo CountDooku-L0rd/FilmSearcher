@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { FilmsAPI } from "@yp-mentor/films-server-types";
+import { filmsApi } from "./api/filmsApi/filmsApi";
 
 type GetFilmsSuccessResponseType = Awaited<ReturnType<FilmsAPI["getFilms"]>>;
 interface MainState {
-  isLoading: boolean;
   films: GetFilmsSuccessResponseType["data"];
   filmStatistic: {
     total: number | undefined;
@@ -12,13 +12,11 @@ interface MainState {
     watched: number | null;
   };
   pagination: GetFilmsSuccessResponseType["pagination"];
-  serverError: boolean;
   isServerRequest: boolean;
   isUpdating: boolean;
 }
 
 const initialState: MainState = {
-  isLoading: true,
   films: [],
   filmStatistic: {
     total: undefined,
@@ -30,7 +28,6 @@ const initialState: MainState = {
     pageSize: 8,
     total: 0,
   },
-  serverError: false,
   isServerRequest: false,
   isUpdating: false,
 };
@@ -39,9 +36,6 @@ const mainSlice = createSlice({
   name: "main",
   initialState,
   reducers: {
-    setIsLoading: (state, action: PayloadAction<boolean>) => {
-      state.isLoading = action.payload;
-    },
     setFilms: (
       state,
       action: PayloadAction<GetFilmsSuccessResponseType["data"]>,
@@ -60,9 +54,6 @@ const mainSlice = createSlice({
     ) => {
       state.pagination = action.payload;
     },
-    setServerError: (state, action: PayloadAction<boolean>) => {
-      state.serverError = action.payload;
-    },
     setIsServerRequest: (state, action: PayloadAction<boolean>) => {
       state.isServerRequest = action.payload;
     },
@@ -70,14 +61,22 @@ const mainSlice = createSlice({
       state.isUpdating = action.payload;
     },
   },
+  extraReducers: (builder) => {
+    builder.addMatcher(
+      filmsApi.endpoints.getFilms.matchFulfilled,
+      (state, { payload }) => {
+        state.films = payload.data;
+        state.filmStatistic = payload.statistic;
+        state.pagination = payload.pagination;
+      },
+    );
+  },
 });
 
 export const {
-  setIsLoading,
   setFilms,
   setStatistic,
   setPagination,
-  setServerError,
   setIsServerRequest,
   setIsUpdating,
 } = mainSlice.actions;

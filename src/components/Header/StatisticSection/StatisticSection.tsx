@@ -1,13 +1,16 @@
 import styles from "./StatisticSection.module.css";
 import { useAppSelector } from "../../../hooks/storeHooks.ts";
+import { useGetFilmsMutation } from "../../../store/api/filmsApi/filmsApi.ts";
 
 const StatisticSection = () => {
-  const { isLoading, serverError, filmStatistic, isUpdating } = useAppSelector(
+  const { filmStatistic, isUpdating } = useAppSelector(
     (store) => store.main,
   );
-
+  const [, { isError, isLoading }] = useGetFilmsMutation({
+    fixedCacheKey: "shared-get-films",
+  });
   const { total, averageRating, watched } = filmStatistic;
-  if (serverError) return null;
+  if (isError) return null;
   return (
     <ul className={styles.list}>
       <li className={styles.list__elem}>
