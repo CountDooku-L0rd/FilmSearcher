@@ -4,12 +4,15 @@ import { Link, useNavigate } from "react-router";
 import { useLoginMutation } from "../../store/api/authApi/authApi";
 import { useAppDispatch } from "../../hooks/storeHooks";
 import { setCredentials } from "../../store/authSlice";
+import type { FormEvent } from "react";
 
 const Auth = () => {
   const navigate = useNavigate();
   const [login, { isLoading }] = useLoginMutation();
   const dispatch = useAppDispatch();
-  const handleSubmit = (formData: FormData) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget as HTMLFormElement)
     login({
       username: formData.get("username")!.toString(),
       password: formData.get("password")!.toString(),
@@ -24,7 +27,7 @@ const Auth = () => {
   };
   return (
     <div className={styles.auth}>
-      <form className={styles.container} action={handleSubmit}>
+      <form className={styles.container} onSubmit={handleSubmit}>
         <CustomInput title="Логин" style={{ width: "270px" }} name="username" />
         <CustomInput
           title="Пароль"

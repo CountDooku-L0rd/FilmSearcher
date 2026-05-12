@@ -37,7 +37,7 @@ function App() {
           path="*"
           element={
             isAuthenticated ? (
-              <Navigate to="/MainPage" replace />
+              <Navigate to="/mainPage" replace />
             ) : (
               <Navigate to="/login" replace />
             )

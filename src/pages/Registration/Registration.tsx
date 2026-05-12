@@ -3,12 +3,15 @@ import styles from "./Registration.module.css";
 import { Link, useNavigate } from "react-router";
 import { useRegisterMutation } from "../../store/api/authApi/authApi";
 import { showErrorToast } from "../../toasts/toasts";
+import type { FormEvent } from "react";
 
 const Register = () => {
   const [register, { isLoading }] = useRegisterMutation();
   const navigate = useNavigate();
 
-  const handleSubmit = (formData: FormData) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget as HTMLFormElement);
     if (formData.get("password") !== formData.get("confirmPassword")) {
       showErrorToast("Пароли не совпадают");
     } else {
@@ -22,15 +25,11 @@ const Register = () => {
         .then(() => {
           navigate("/login");
         })
-        .catch((error) => {
-          console.log(error);
-          showErrorToast(error.data.errorMessage);
-        });
     }
   };
   return (
     <div className={styles.register}>
-      <form className={styles.container} action={handleSubmit}>
+      <form className={styles.container} onSubmit={handleSubmit}>
         <CustomInput
           title="Логин *"
           style={{ width: "270px" }}
