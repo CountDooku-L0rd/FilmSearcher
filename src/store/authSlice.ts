@@ -1,5 +1,4 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { authApi } from "./api/authApi/authApi";
 
 interface User {
   id: number;
@@ -34,22 +33,7 @@ const authSlice = createSlice({
       localStorage.removeItem("accessToken");
     },
   },
-  extraReducers: (builder) => {
-    builder.addMatcher(
-      authApi.endpoints.login.matchFulfilled,
-      (state, { payload }) => {
-        state.isAuthenticated = !!payload.user;
-      },
-    );
-    builder.addMatcher(
-      authApi.endpoints.getMe.matchFulfilled,
-      (state, { payload }) => {
-        state.user = payload;
-        state.isAuthenticated = !!payload;
-      },
-    );
-  },
 });
 
-export const { setCredentials, clearCredentials } = authSlice.actions;
+export const { setAuthenticated, setCredentials, clearCredentials } = authSlice.actions;
 export default authSlice.reducer;

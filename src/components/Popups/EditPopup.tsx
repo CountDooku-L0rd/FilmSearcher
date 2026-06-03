@@ -3,7 +3,6 @@ import { createPortal } from "react-dom";
 import CustomSelect from "../shared/CustomSelect/CustomSelect";
 import { addStatusOptions, statusMapping } from "../../constants/constants";
 import { EGenre, EStatus } from "@yp-mentor/films-server-types";
-import { showErrorToast, showSuccessToast } from "../../toasts/toasts";
 import {
   validateDirector,
   validateGenres,
@@ -19,17 +18,16 @@ import {
   setIsEditModalOpen,
   setIsRequesting,
 } from "../../store/modalSlice";
-import { useGetFilms } from "../../hooks/useGetFilms";
 import CustomInput from "../shared/CustomInput/CustomInput";
 import CustomTextarea from "../shared/CustomTextarea/CustomTextarea";
 import styles from "./Popup.module.css";
 import CheckboxList from "../shared/CheckboxList/CheckboxList";
-import { useUpdateFilmMutation } from "../../store/api/filmsApi/filmsApi";
+import { useEditFilmMutation } from "../../hooks/useEditFilmMutation";
+import { createBodyForEditOrCreateFilmRequest } from "../../utils/utils";
 
 const EditPopup = () => {
-  const { getFilms } = useGetFilms();
   const dispatch = useAppDispatch();
-  const { data, isEditModalOpen, errors, isRequesting } = useAppSelector(
+  const { data, isEditModalOpen, errors } = useAppSelector(
     (store) => store.modal,
   );
   const updateField = <T,>(key: string, value: T) => {
@@ -41,47 +39,15 @@ const EditPopup = () => {
   const [ratingInput, setRatingInput] = useState(
     data.rating !== 0 ? data.rating.toString() : "",
   );
-  const [updateFilmTrigger] = useUpdateFilmMutation();
   useClickEscape(isEditModalOpen);
-
+  const editFilm = useEditFilmMutation(dispatch);
   const handleSubmit = (e: SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
     e.preventDefault();
-
     dispatch(setIsRequesting(true));
-    const body = {
-      title: data.title,
-      director: data.director,
-      year: data.year,
-      genres: data.genres,
-      description: data.description,
-      image: data.image,
-      rating: data.rating,
-      status: data.status,
-    };
-    const id = data.id.toString();
-
-    if (id) {
-      updateFilmTrigger({ body, id })
-        .then(() => {
-          showSuccessToast("Данные фильма успешно изменены");
-          getFilms();
-          dispatch(setIsEditModalOpen(false));
-        })
-        .catch((error: unknown) => {
-          if (error instanceof Error) {
-            showErrorToast(error.message);
-          } else {
-            showErrorToast(error as string);
-          }
-          console.error(error);
-        })
-        .finally(() => {
-          dispatch(setIsRequesting(false));
-        });
-    } else {
-      showErrorToast("Ошибка, ID перестал существовать");
-      dispatch(setIsRequesting(false));
-    }
+    editFilm.mutate({
+      body: createBodyForEditOrCreateFilmRequest(data),
+      filmId: data.id,
+    });
   };
 
   if (!isEditModalOpen) return null;
@@ -218,7 +184,7 @@ const EditPopup = () => {
           <button
             className={`${styles.button} ${styles.submit_button}`}
             type="submit"
-            disabled={isRequesting}
+            disabled={editFilm.isPending}
           >
             <p>Сохранить</p>
           </button>

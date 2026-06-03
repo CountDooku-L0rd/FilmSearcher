@@ -2,11 +2,9 @@ import Header from "../../components/Header/Header";
 import Main from "../../components/Main/Main";
 import AddPopup from "../../components/Popups/AddPopup";
 import EditPopup from "../../components/Popups/EditPopup";
-import useGetFilmsWithUpdates from "../../hooks/useGetFilmsWithUpdates";
 import styles from "./MainPage.module.css";
 
 const MainPage = () => {
-  useGetFilmsWithUpdates();
   return (
     <div className={styles.movie_app}>
       <Header />

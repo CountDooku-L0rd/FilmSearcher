@@ -1,7 +1,7 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { EStatus, type FilmsAPI } from "@yp-mentor/films-server-types";
 
-type IFilm = Awaited<ReturnType<FilmsAPI["getFilms"]>>["data"][number];
+export type IFilm = Awaited<ReturnType<FilmsAPI["getFilms"]>>["data"][number];
 
 interface IErrors {
   title: string;

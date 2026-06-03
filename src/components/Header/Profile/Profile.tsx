@@ -1,19 +1,16 @@
 import { useNavigate } from "react-router";
 import { useAppDispatch, useAppSelector } from "../../../hooks/storeHooks";
-import { clearCredentials } from "../../../store/authSlice";
 import styles from "./Profile.module.css";
-import { useGetFilmsMutation } from "../../../store/api/filmsApi/filmsApi";
-import { useLogoutMutation } from "../../../store/api/authApi/authApi";
+import { useGetFilmsWithSync } from "../../../hooks/useGetFilmsWithSync";
+import { useLogout } from "../../../hooks/useLogout";
 
 const Profile = () => {
   const { user } = useAppSelector((store) => store.auth);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [, { isError }] = useGetFilmsMutation({
-    fixedCacheKey: "shared-get-films",
-  });
-  const [logoutTrigger] = useLogoutMutation();
-  if (isError) return null;
+  const {error} = useGetFilmsWithSync();
+  const logout = useLogout(dispatch, navigate);
+  if (error) return null;
   return (
     <div className={styles.container}>
       <div className={styles.elem}>
@@ -22,13 +19,8 @@ const Profile = () => {
       </div>
       <button
         className={styles.button}
-        onClick={() => {
-          logoutTrigger().then(() => {
-            localStorage.removeItem("accessToken");
-            dispatch(clearCredentials());
-            navigate("/login");
-          });
-        }}
+        onClick={() => logout.mutate()}
+        disabled={logout.isPending}
       >
         <div className={styles.exit_svg} />
         <p className={styles.exit}>Выйти</p>

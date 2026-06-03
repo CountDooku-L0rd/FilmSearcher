@@ -1,30 +1,21 @@
 import CustomInput from "../../components/shared/CustomInput/CustomInput";
 import styles from "./Registration.module.css";
 import { Link, useNavigate } from "react-router";
-import { useRegisterMutation } from "../../store/api/authApi/authApi";
 import { showErrorToast } from "../../toasts/toasts";
 import type { FormEvent } from "react";
+import { useRegistrationMutate } from "../../hooks/useRegistrationMutation";
+import { createBodyForRegistrationRequest } from "../../utils/utils";
 
 const Register = () => {
-  const [register, { isLoading }] = useRegisterMutation();
   const navigate = useNavigate();
-
+  const registrationMutate = useRegistrationMutate(navigate);
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget as HTMLFormElement);
     if (formData.get("password") !== formData.get("confirmPassword")) {
       showErrorToast("Пароли не совпадают");
     } else {
-      register({
-        username: formData.get("username")!.toString(),
-        password: formData.get("password")!.toString(),
-        email: formData.get("email")!.toString(),
-        confirmPassword: formData.get("confirmPassword")!.toString(),
-      })
-        .unwrap()
-        .then(() => {
-          navigate("/login");
-        })
+      registrationMutate.mutate(createBodyForRegistrationRequest(formData));
     }
   };
   return (
@@ -46,7 +37,10 @@ const Register = () => {
           style={{ width: "270px" }}
           name="confirmPassword"
         />
-        <button className={styles.button} disabled={isLoading}>
+        <button
+          className={styles.button}
+          disabled={registrationMutate.isPending}
+        >
           Зарегистрироваться
         </button>
         <div className={styles.login}>

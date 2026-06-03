@@ -3,7 +3,6 @@ import { createPortal } from "react-dom";
 import CustomSelect from "../shared/CustomSelect/CustomSelect";
 import { addStatusOptions, statusMapping } from "../../constants/constants";
 import { EGenre, EStatus } from "@yp-mentor/films-server-types";
-import { showSuccessToast } from "../../toasts/toasts";
 import {
   validateDirector,
   validateGenres,
@@ -19,16 +18,15 @@ import {
   setIsAddModalOpen,
   setIsRequesting,
 } from "../../store/modalSlice";
-import { useGetFilms } from "../../hooks/useGetFilms";
 import styles from "./Popup.module.css";
 import CustomInput from "../shared/CustomInput/CustomInput";
 import CustomTextarea from "../shared/CustomTextarea/CustomTextarea";
 import CheckboxList from "../shared/CheckboxList/CheckboxList";
 import { setIsUpdating } from "../../store/mainSlice";
-import { useCreateFilmMutation } from "../../store/api/filmsApi/filmsApi";
+import { useCreateFilmMutation } from "../../hooks/useCreateFilmMutation";
+import { createBodyForEditOrCreateFilmRequest } from "../../utils/utils";
 
 const AddPopup = () => {
-  const { getFilms } = useGetFilms();
   const dispatch = useAppDispatch();
   const updateField = <T,>(key: string, value: T) => {
     dispatch(setData({ ...data, [key]: value }));
@@ -36,39 +34,21 @@ const AddPopup = () => {
   const updateError = (key: string, value: string) => {
     dispatch(setErrors({ ...errors, [key]: value }));
   };
-  const { data, isAddModalOpen, errors, isRequesting } = useAppSelector(
+  const { data, isAddModalOpen, errors } = useAppSelector(
     (store) => store.modal,
   );
   const [ratingInput, setRatingInput] = useState(
     data.rating !== 0 ? data.rating.toString() : "",
   );
-  const [createFilmMutation] = useCreateFilmMutation();
   useClickEscape(isAddModalOpen);
-
+  const createFilm = useCreateFilmMutation(dispatch);
   const handleSubmit = (e: SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
     e.preventDefault();
     dispatch(setIsUpdating(true));
     dispatch(setIsRequesting(true));
-    const body = {
-      title: data.title,
-      director: data.director,
-      year: data.year,
-      genres: data.genres,
-      description: data.description,
-      image: data.image,
-      rating: data.rating,
-      status: data.status,
-    };
-    createFilmMutation({ body })
-      .then(() => {
-        showSuccessToast("Фильм успешно добавлен");
-        getFilms();
-        dispatch(setIsAddModalOpen(false));
-      })
-      .finally(() => {
-        dispatch(setIsRequesting(false));
-        dispatch(setIsUpdating(false));
-      });
+    createFilm.mutate({
+      body: createBodyForEditOrCreateFilmRequest(data),
+    });
   };
 
   if (!isAddModalOpen) return null;
@@ -205,7 +185,7 @@ const AddPopup = () => {
           <button
             className={`${styles.button} ${styles.submit_button}`}
             type="submit"
-            disabled={isRequesting}
+            disabled={createFilm.isPending}
           >
             <p>Сохранить</p>
           </button>

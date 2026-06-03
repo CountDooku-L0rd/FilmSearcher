@@ -1,8 +1,8 @@
-import { useGetFilms } from "../../hooks/useGetFilms";
+import { useGetFilmsWithSync } from "../../hooks/useGetFilmsWithSync";
 import styles from "./ServerErrorSection.module.css";
 
 const ServerErrorSection = () => {
-  const { getFilms } = useGetFilms();
+  const { refetch } = useGetFilmsWithSync();
   return (
     <div className={styles.container}>
       <div className={styles.server_error_svg}></div>
@@ -13,7 +13,7 @@ const ServerErrorSection = () => {
       <button
         className={styles.button}
         onClick={() => {
-          getFilms();
+          refetch();
         }}
       >
         Повторить попытку

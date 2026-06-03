@@ -1,22 +1,19 @@
 import styles from "./StatisticSection.module.css";
 import { useAppSelector } from "../../../hooks/storeHooks.ts";
-import { useGetFilmsMutation } from "../../../store/api/filmsApi/filmsApi.ts";
+import { useGetFilmsWithSync } from "../../../hooks/useGetFilmsWithSync.ts";
 
 const StatisticSection = () => {
-  const { filmStatistic, isUpdating } = useAppSelector(
-    (store) => store.main,
-  );
-  const [, { isError, isLoading }] = useGetFilmsMutation({
-    fixedCacheKey: "shared-get-films",
-  });
+  const { filmStatistic, isUpdating } = useAppSelector((store) => store.main);
+  const { error, isLoading, isFetching } = useGetFilmsWithSync();
+  const showSkeletons = isLoading || isFetching;
   const { total, averageRating, watched } = filmStatistic;
-  if (isError) return null;
+  if (error) return null;
   return (
     <ul className={styles.list}>
       <li className={styles.list__elem}>
         <div>
           {total && !isUpdating && <p className={styles.number}>{total}</p>}
-          {(!total || (isUpdating && isLoading)) && (
+          {(!total || (isUpdating && showSkeletons)) && (
             <div className={styles.statistic_skeleton}></div>
           )}
         </div>
@@ -29,7 +26,7 @@ const StatisticSection = () => {
       <li className={styles.list__elem}>
         <div>
           {watched && !isUpdating && <p className={styles.number}>{watched}</p>}
-          {(!watched || (isUpdating && isLoading)) && (
+          {(!watched || (isUpdating && showSkeletons)) && (
             <div className={styles.statistic_skeleton}></div>
           )}
         </div>
@@ -44,7 +41,7 @@ const StatisticSection = () => {
           {averageRating && !isUpdating && (
             <p className={styles.number}>{averageRating.toFixed(1)}</p>
           )}
-          {(!averageRating || (isUpdating && isLoading)) && (
+          {(!averageRating || (isUpdating && showSkeletons)) && (
             <div className={styles.statistic_skeleton}></div>
           )}
         </div>

@@ -1,21 +1,32 @@
 import "primereact/resources/themes/mira/theme.css";
-import { Navigate, Route, Routes } from "react-router";
+import { Navigate, Route, Routes, useNavigate } from "react-router";
 import Auth from "./pages/Auth/Auth";
 import Register from "./pages/Registration/Registration";
 import MainPage from "./pages/MainPage/MainPage";
-import { useGetMeQuery } from "./store/api/authApi/authApi";
 import CustomToaster from "./components/shared/CustomToaster/CustomToaster";
 import RoutingLoad from "./components/RoutingLoad/RoutingLoad";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
-import { useAppSelector } from "./hooks/storeHooks";
+import { useAppDispatch, useAppSelector } from "./hooks/storeHooks";
+import { useEffect, useRef } from "react";
+import { useMeMutation } from "./hooks/useMeMutation";
 
 function App() {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const token = localStorage.getItem("accessToken");
-  const { isLoading } = useGetMeQuery(undefined, {
-    skip: !token,
-  });
-  const isAuthenticated = useAppSelector((slice) => slice.auth.isAuthenticated);
-  if (isLoading) {
+  const isAuthenticated = useAppSelector((store) => store.auth.isAuthenticated);
+  const hasChecked = useRef(false);
+
+  const me = useMeMutation(dispatch, navigate);
+
+  useEffect(() => {
+    if (token && !isAuthenticated && !hasChecked.current) {
+      hasChecked.current = true;
+      me.mutate();
+    }
+  }, [token, isAuthenticated]);
+
+  if (token && me.isPending) {
     return <RoutingLoad />;
   }
 
